@@ -1,0 +1,151 @@
+{
+	"baseCabbage":
+	{
+		"name": "",
+		"horPos": 0.0,
+		"verPos": 0.0,
+		"scaleX": 1.0,
+		"scaleY": 1.0,
+		"rot": 0.0,
+		"dep": -3,
+		"colors": [],
+		"flipX": false,
+		"flipY": false
+	},
+	"headpiece":
+	{
+		"name": "",
+		"horPos": 0.0,
+		"verPos": 3.5,
+		"scaleX": 3.0,
+		"scaleY": 3.0,
+		"rot": 0.0,
+		"dep": -2,
+		"colors": [],
+		"flipX": false,
+		"flipY": false
+	},
+	"eyebrows":
+	{
+		"left":
+		{
+			"name": "",
+			"horPos": -3.5,
+			"verPos": 4.0,
+			"scaleX": 3.0,
+			"scaleY": 3.0,
+			"rot": 0.0,
+			"dep": 0,
+			"colors": [],
+			"flipX": false,
+			"flipY": false
+		},
+		"right":
+		{
+			"name": "",
+			"horPos": 3.5,
+			"verPos": 4.0,
+			"scaleX": 3.0,
+			"scaleY": 3.0,
+			"rot": 0.0,
+			"dep": 0,
+			"colors": [],
+			"flipX": false,
+			"flipY": false	
+		}
+	},
+	"eyes":
+	{
+		"left":
+		{
+			"name": "",
+			"horPos": -3.5,
+			"verPos": 1.0,
+			"scaleX": 3.0,
+			"scaleY": 3.0,
+			"rot": 0.0,
+			"dep": -1,
+			"colors": [],
+			"flipX": false,
+			"flipY": false
+		},
+		"right":
+		{
+			"name": "",
+			"horPos": 3.5,
+			"verPos": 1.0,
+			"scaleX": 3.0,
+			"scaleY": 3.0,
+			"rot": 0.0,
+			"dep": -1,
+			"colors": [],
+			"flipX": false,
+			"flipY": false				
+		}
+	},	
+	"nose":
+	{
+		"name": "",
+		"horPos": 0.0,
+		"verPos": -1.0,
+		"scaleX": 3.0,
+		"scaleY": 3.0,
+		"rot": 0.0,
+		"dep": 1,
+		"colors": [],
+		"flipX": false,
+		"flipY": false
+	},
+	"mouth":
+	{
+		"name": "",
+		"horPos": 0.0,
+		"verPos": -4.0,
+		"scaleX": 3.0,
+		"scaleY": 3.0,
+		"rot": 0.0,
+		"dep": 2,
+		"colors": [],
+		"flipX": false,
+		"flipY": false
+	},
+	"acc1":
+	{
+		"name": "",
+		"horPos": 0.0,
+		"verPos": -8.0,
+		"scaleX": 1.0,
+		"scaleY": 1.0,
+		"rot": 0.0,
+		"dep": 3,
+		"colors": [],
+		"flipX": false,
+		"flipY": false
+	},
+	"acc2":
+	{
+		"name": "",
+		"horPos": -5.0,
+		"verPos": -4.0,
+		"scaleX": 1.0,
+		"scaleY": 1.0,
+		"rot": 0.0,
+		"dep": 4,
+		"colors": [],
+		"flipX": false,
+		"flipY": false
+	},
+	"acc3":
+	{
+		"name": "",
+		"horPos": 5.0,
+		"verPos": -4.0,
+		"scaleX": 1.0,
+		"scaleY": 1.0,
+		"rot": 0.0,
+		"dep": 5,
+		"colors": [],
+		"flipX": false,
+		"flipY": false
+	}
+}
