@@ -62,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
             this.playerVelocity = Vector3.zero;
         }
 
-        this.rigidBody.velocity = playerVelocity;        
+        this.rigidBody.velocity = playerVelocity;
     }
 
     

@@ -6,10 +6,17 @@ using UnityEngine.Tilemaps;
 public class TilemapTest : MonoBehaviour
 {
     [SerializeField]
-    private Tilemap testTilemap;
-    [SerializeField]
-    private Tile testTile;
+    private Grid gridObject;
 
+    [SerializeField]
+    private Tilemap tilemapObject;
+
+    [SerializeField]
+    private TileBase tileObject;
+
+    [SerializeField]
+    private Transform playerTransform;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -17,8 +24,5 @@ public class TilemapTest : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }
