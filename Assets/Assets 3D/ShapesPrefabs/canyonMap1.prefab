@@ -31,6 +31,7 @@ Transform:
   - {fileID: 2230978354434808919}
   - {fileID: 3684828030373321929}
   - {fileID: 3646369952885903024}
+  - {fileID: 6406634815093251658}
   m_Father: {fileID: 6971290241550629488}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -196,6 +197,81 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &2506708065354830666
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2126283676097262407}
+    m_Modifications:
+    - target: {fileID: 5712829362923973251, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
+        type: 3}
+      propertyPath: m_Name
+      value: canyonMediumPrefab (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -31.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 31.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.988912
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.14850266
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 17.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6e6ebea3b7ec49b4fac06ac4f202c572, type: 3}
+--- !u!4 &6406634815093251658 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
+    type: 3}
+  m_PrefabInstance: {fileID: 2506708065354830666}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6362111050007149343
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -366,7 +442,7 @@ PrefabInstance:
     - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.5
+      value: 15.5
       objectReference: {fileID: 0}
     - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
         type: 3}
@@ -376,7 +452,7 @@ PrefabInstance:
     - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.6
+      value: -21
       objectReference: {fileID: 0}
     - target: {fileID: 8800435955302157568, guid: 6e6ebea3b7ec49b4fac06ac4f202c572,
         type: 3}
