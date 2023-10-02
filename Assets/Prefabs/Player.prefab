@@ -66,6 +66,9 @@ MonoBehaviour:
   maxSpeed: 10
   maxAcceleration: 100
   maxDeceleration: 10
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!33 &3919526034649298860
 MeshFilter:
   m_ObjectHideFlags: 0

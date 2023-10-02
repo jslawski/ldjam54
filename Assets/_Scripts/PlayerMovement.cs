@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Rigidbody rigidBody { get; private set; }
 
+    public LayerMask collisionLayer;
+
     private void Start()
     {
         this.rigidBody = GetComponent<Rigidbody>();
@@ -38,8 +40,10 @@ public class PlayerMovement : MonoBehaviour
         {
             Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(mouseRay, out hit))
+
+            if (Physics.Raycast(mouseRay, out hit, float.PositiveInfinity, this.collisionLayer, QueryTriggerInteraction.Ignore))
             {
+                Debug.LogError("Raycast Hist " + hit.collider.gameObject.name);
                 Vector3 desiredDirection = hit.point - this.transform.position;
                 desiredPlayerVelocity = desiredDirection.normalized * maxSpeed;
                 desiredMaxSpeedChange = this.maxAcceleration;
