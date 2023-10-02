@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1979393548648097355}
   - component: {fileID: 2408271527494339927}
   - component: {fileID: 7774252363917897523}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: propellorRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 7986898257824263001}
   - component: {fileID: 6206266388233790342}
   - component: {fileID: 8336921046921161002}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: kneeRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 4809092530370790685}
   - component: {fileID: 2111729372034343211}
   - component: {fileID: 3614491099645663975}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: footRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 1033679453714533661}
   - component: {fileID: 5888665729322743751}
   - component: {fileID: 3680171222458948445}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: shinRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 6303538533415851950}
   - component: {fileID: 6303538533415851936}
   - component: {fileID: 6303538533415851951}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: motionTrailParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5158,7 +5158,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6303538533533002134}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: propellerRightContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5192,7 +5192,7 @@ GameObject:
   - component: {fileID: 6303538533708900965}
   - component: {fileID: 6303538533708900966}
   - component: {fileID: 6303538533708900967}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: robotBrainsAnimator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5261,7 +5261,7 @@ GameObject:
   - component: {fileID: 6303538534073926407}
   - component: {fileID: 6303538534073926425}
   - component: {fileID: 6303538534073926424}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: smokeParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10073,7 +10073,7 @@ GameObject:
   - component: {fileID: 6303538534190656974}
   - component: {fileID: 6303538534190656960}
   - component: {fileID: 6303538534190656975}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: motionTrailParticle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14886,7 +14886,7 @@ GameObject:
   - component: {fileID: 6303538534303949205}
   - component: {fileID: 6303538534303949207}
   - component: {fileID: 6303538534303949206}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: shadowPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14967,7 +14967,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6303538534669503288}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: propellerLeftContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14999,7 +14999,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6303538534870219944}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: robotBrainsPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15034,7 +15034,7 @@ GameObject:
   - component: {fileID: 6303538535042214493}
   - component: {fileID: 6303538535042214495}
   - component: {fileID: 6303538535042214494}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: motionTrailParticle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19847,7 +19847,7 @@ GameObject:
   - component: {fileID: 6303538535393773869}
   - component: {fileID: 6303538535393773871}
   - component: {fileID: 6303538535393773870}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: motionTrailParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24660,7 +24660,7 @@ GameObject:
   - component: {fileID: 4805440818578412407}
   - component: {fileID: 1990898331365855251}
   - component: {fileID: 4636611738487598092}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: propellorLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24743,7 +24743,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5832183075873824233}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: robotBrains
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24781,7 +24781,7 @@ GameObject:
   - component: {fileID: 4919897626549167939}
   - component: {fileID: 2895887278715540123}
   - component: {fileID: 2223047020598818797}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: footLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24864,7 +24864,7 @@ GameObject:
   - component: {fileID: 340070995742954335}
   - component: {fileID: 425525249697015375}
   - component: {fileID: 7127400785463669575}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: thighLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24948,7 +24948,7 @@ GameObject:
   - component: {fileID: 7677542654744345416}
   - component: {fileID: 5563151887573107403}
   - component: {fileID: 2424320147787006176}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: thighRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25032,7 +25032,7 @@ GameObject:
   - component: {fileID: 8778287042164612925}
   - component: {fileID: 7834248348476327908}
   - component: {fileID: 2467621118598152382}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25115,7 +25115,7 @@ GameObject:
   - component: {fileID: 9196661178298930707}
   - component: {fileID: 1643319695536522501}
   - component: {fileID: 7585119968603260965}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: shinLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25199,7 +25199,7 @@ GameObject:
   - component: {fileID: 8702924854489047530}
   - component: {fileID: 3322105479289120596}
   - component: {fileID: 8813466091740456912}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: kneeLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}

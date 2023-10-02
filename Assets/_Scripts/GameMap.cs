@@ -106,7 +106,7 @@ public class GameMap : MonoBehaviour
     {
         //Debug.Log("Loading Chunk: " + chunk.chunkID);
 
-        int batchSize = 50000;
+        int batchSize = 10000;
         int currentBatchSize = 0;
 
         int tilesChanged = 0;
@@ -179,8 +179,6 @@ public class GameMap : MonoBehaviour
     {
         MapChunk chunk = this.mapChunks[new Tuple<int, int>(xIndex, yIndex)];
 
-        Debug.LogError("Dirty Bits: " + chunk.dirtyPoints.Count);
-
         StartCoroutine(this.UpdateChunkFile(chunk));
     }
 
@@ -199,7 +197,7 @@ public class GameMap : MonoBehaviour
         
         string[] allChunkLines = File.ReadAllLines(chunk.GetChunkFilePath());
 
-        int batchSize = 500;
+        int batchSize = 25;
         int currentBatchSize = 0;
 
         int tilesSaved = 0;
@@ -248,12 +246,6 @@ public class GameMap : MonoBehaviour
         TextAsset chunkFile = Resources.Load<TextAsset>("MapChunks/" + chunk.chunkID);
 
         WWWForm form = new WWWForm();
-
-        //form.headers["Content-Type"] = "multipart/form-data";
-        //form.headers["Access-Control-Allow-Origin"] = "*";
-        //form.headers["Access-Control-Allow-Credentials"] = "true";
-        //form.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS";
-        //form.headers["Access-Control-Allow-Headers"] = "Accept, X-Access-Token, X-Application-Name, X-Request-Sent-Time";
         
         form.AddField("chunkID", chunk.chunkID);                
         form.AddBinaryData("chunkData",  Encoding.UTF8.GetBytes(fullString));

@@ -19,7 +19,7 @@ public class PlayerCharacter : MonoBehaviour
     // Start is called before the first frame update
     public void Setup()
     {
-        this.playerTeam = Team.Team2;
+        this.playerTeam = (Team)Random.Range(1, 3);
 
         this.SetupPlayerModel();
 

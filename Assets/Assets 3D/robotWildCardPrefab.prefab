@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3405492170488748284}
   - component: {fileID: 3405492170488748274}
   - component: {fileID: 3405492170488748275}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: motionTrailParticle2 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4824,7 +4824,7 @@ GameObject:
   - component: {fileID: 3405492170826030459}
   - component: {fileID: 3405492170826030458}
   - component: {fileID: 3405492170826030457}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: robotWildCardAnimator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4893,7 +4893,7 @@ GameObject:
   - component: {fileID: 3405492170828853060}
   - component: {fileID: 3405492170828853114}
   - component: {fileID: 3405492170828853115}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: shadowPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4976,7 +4976,7 @@ GameObject:
   - component: {fileID: 3405492171102551878}
   - component: {fileID: 3405492171102551876}
   - component: {fileID: 3405492171102551877}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: smokeParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9788,7 +9788,7 @@ GameObject:
   - component: {fileID: 3405492171114330476}
   - component: {fileID: 3405492171114330466}
   - component: {fileID: 3405492171114330467}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: motionTrailParticle2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14601,7 +14601,7 @@ GameObject:
   - component: {fileID: 3405492171644038235}
   - component: {fileID: 3405492171644038233}
   - component: {fileID: 3405492171644038234}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: motionTrailParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19417,7 +19417,7 @@ GameObject:
   - component: {fileID: 3405492172209910510}
   - component: {fileID: 3405492172209910508}
   - component: {fileID: 3405492172209910509}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: motionTrailParticle2 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24228,7 +24228,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3405492172328002246}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: robotWildCardPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24315,6 +24315,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6955622069337770662, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: -6116422363749611617, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -24345,6 +24350,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.y
       value: -0.2847207
       objectReference: {fileID: 0}
+    - target: {fileID: -4819223349682164798, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: -3267275183020464612, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -24359,6 +24369,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0.2555237
+      objectReference: {fileID: 0}
+    - target: {fileID: -1346704995115844842, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -633286477931930172, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
         type: 3}
@@ -24395,6 +24410,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 4.593
       objectReference: {fileID: 0}
+    - target: {fileID: -611292877921868622, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: -381491362004601904, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -24425,6 +24445,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 193218920121418391, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 368542788914849720, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -24447,6 +24472,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
         type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
+        type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -24460,6 +24490,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: b738edd2d32734448af42b1f23de0861, type: 2}
+    - target: {fileID: 5486611649070393245, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6815985454462084835, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -24470,6 +24505,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: b738edd2d32734448af42b1f23de0861, type: 2}
+    - target: {fileID: 8514780460679909417, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8881504032098850718, guid: 60ef4401bfd76984a9a3f2bab801c6a0,
         type: 3}
       propertyPath: m_Materials.Array.data[0]

@@ -31,6 +31,8 @@ public class PlayerMovement : MonoBehaviour
     {
         this.playerVelocity.x = Mathf.MoveTowards(playerVelocity.x, desiredVelocity.x, maxSpeedChange);
         this.playerVelocity.z = Mathf.MoveTowards(playerVelocity.z, desiredVelocity.z, maxSpeedChange);
+
+        this.transform.forward = new Vector3(this.playerVelocity.x, this.transform.forward.y, this.playerVelocity.z).normalized;
     }
 
     private void Update()

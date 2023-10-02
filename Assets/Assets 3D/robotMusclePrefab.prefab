@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1907037306347299919}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: robotMusclePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 1907037306987830142}
   - component: {fileID: 1907037306987830129}
   - component: {fileID: 1907037306987830128}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: robotMuscleAnimator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ GameObject:
   - component: {fileID: 1907037307453296605}
   - component: {fileID: 1907037307453296607}
   - component: {fileID: 1907037307453296604}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: shadowPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 1907037307740995044}
   - component: {fileID: 1907037307740995046}
   - component: {fileID: 1907037307740995047}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: smokeParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5009,7 +5009,7 @@ GameObject:
   - component: {fileID: 1907037308013105707}
   - component: {fileID: 1907037308013105709}
   - component: {fileID: 1907037308013105706}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: thrusterParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9882,6 +9882,31 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5869250651717150543, guid: a281ea9827bdf7541b64c90053cd1427,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -4819223349682164798, guid: a281ea9827bdf7541b64c90053cd1427,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -4081609221356008064, guid: a281ea9827bdf7541b64c90053cd1427,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -3949436395788077964, guid: a281ea9827bdf7541b64c90053cd1427,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -3924740746642414787, guid: a281ea9827bdf7541b64c90053cd1427,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: -3670109843512462444, guid: a281ea9827bdf7541b64c90053cd1427,
         type: 3}
       propertyPath: m_LocalRotation.y
@@ -9892,6 +9917,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3533378776346172569, guid: a281ea9827bdf7541b64c90053cd1427,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a281ea9827bdf7541b64c90053cd1427,
         type: 3}
       propertyPath: m_Name
@@ -9899,8 +9929,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a281ea9827bdf7541b64c90053cd1427,
         type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a281ea9827bdf7541b64c90053cd1427,
+        type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1897391017664406939, guid: a281ea9827bdf7541b64c90053cd1427,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2350853844629953841, guid: a281ea9827bdf7541b64c90053cd1427,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779460047189857319, guid: a281ea9827bdf7541b64c90053cd1427,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a281ea9827bdf7541b64c90053cd1427, type: 3}
