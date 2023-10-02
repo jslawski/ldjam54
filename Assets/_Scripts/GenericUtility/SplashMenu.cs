@@ -10,6 +10,9 @@ public class SplashMenu : MonoBehaviour
 
     private bool loading = false;
 
+    public string scene1Name;
+    public string scene2Name;
+
     private void Awake()
     {
         this.fadePanel.OnFadeSequenceComplete += this.DisplaySplashScreen;
@@ -35,11 +38,11 @@ public class SplashMenu : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("playerID", -1) != -1)
         {
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene(this.scene1Name);
         }
         else
         {
-            SceneManager.LoadScene("CharacterSelect");
+            SceneManager.LoadScene(this.scene2Name);
         }
     }
 }
