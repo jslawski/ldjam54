@@ -12,6 +12,7 @@ public class CameraFollow : MonoBehaviour
     private Transform cameraTransform;
 
     public float targetCameraDistance;
+    public float targetRotation;
 
     public float verticalViewportThreshold = 0.5f;
     public float horizontalViewportThreshold = 0.5f;
@@ -19,7 +20,7 @@ public class CameraFollow : MonoBehaviour
     private static bool followPlayer = false;
     private static Vector3 showcasePoint;
     private static bool snapInitiated = false;
-    private float snapSpeed = 0.3f;
+    private float snapSpeed = 3f;
     private float originalYValue;
     private bool returnZoomInitiated = false;
     private Coroutine SnapCoroutine;
@@ -75,15 +76,28 @@ public class CameraFollow : MonoBehaviour
     public void BeginFollow()
     {
         StartCoroutine(ZoomIn());
+        StartCoroutine(RotateIn());
         StartCoroutine(this.FollowCoroutine());
     }
 
     private IEnumerator ZoomIn()
     {
-        while (Mathf.Abs(this.transform.position.y - this.targetCameraDistance) > 0.1f)
+        while (Mathf.Abs(this.transform.position.y - this.targetCameraDistance) > 0.5f)
         {
             Vector3 targetPoint = new Vector3(this.transform.position.x, this.targetCameraDistance, this.transform.position.z);
-            this.transform.position = Vector3.Lerp(this.transform.position, targetPoint, this.snapSpeed);
+            this.transform.position = Vector3.Lerp(this.transform.position, targetPoint, this.snapSpeed * Time.fixedDeltaTime);
+            yield return new WaitForFixedUpdate();
+        }
+
+        
+    }
+
+    private IEnumerator RotateIn()
+    {
+        while (Mathf.Abs(this.thisCamera.transform.rotation.eulerAngles.x - this.targetRotation) > 0.1f)
+        {
+            float currentRotation = Mathf.Lerp(this.thisCamera.transform.rotation.eulerAngles.x, this.targetRotation, this.snapSpeed * Time.fixedDeltaTime);
+            this.thisCamera.transform.rotation = Quaternion.Euler(currentRotation, this.thisCamera.transform.rotation.eulerAngles.y, this.thisCamera.transform.rotation.eulerAngles.z);
             yield return new WaitForFixedUpdate();
         }
     }
