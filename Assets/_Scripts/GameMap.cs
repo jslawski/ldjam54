@@ -174,15 +174,12 @@ public class GameMap : MonoBehaviour
     public void SaveLatestMap()
     {        
         foreach (KeyValuePair<Tuple<int, int>, MapChunk> entry in this.mapChunks)
-        {
-            this.UploadChunk(entry.Key.Item1, entry.Key.Item2);
-
-            /*
+        {            
             if (entry.Value.isDirty == true)
             {
                 this.UploadChunk(entry.Key.Item1, entry.Key.Item2);
             }
-            */
+            
         }
     }
 
@@ -208,7 +205,7 @@ public class GameMap : MonoBehaviour
         
         string[] allChunkLines = File.ReadAllLines(chunk.GetChunkFilePath());
 
-        int batchSize = 1;
+        int batchSize = 100;
         int currentBatchSize = 0;
 
         int tilesSaved = 0;
@@ -344,15 +341,15 @@ public class GameMap : MonoBehaviour
         int adjustedCellPosY = cellPosition.y - (GameMap.fullMapHeight / 2);
 
         Vector2Int chunkIndices = GameMap.GetChunkIndices(cellPosition);
-
-        //Debug.LogError("Adjusted Cell Space: " + adjustedCellPosX + ", " + adjustedCellPosY);
         
-
-
         int chunkSpaceX = adjustedCellPosX - (GameMap.chunkWidth * chunkIndices.x);
         int chunkSpaceY = adjustedCellPosY + (GameMap.chunkHeight * (chunkIndices.y + 1));
 
-        //Debug.LogError("Chunk Space: " + chunkSpaceX + ", " + chunkSpaceY);
+        chunkSpaceX = Mathf.Max(0, chunkSpaceX);
+        chunkSpaceX = Mathf.Min(chunkSpaceX, GameMap.chunkWidth);
+
+        chunkSpaceY = Mathf.Max(0, chunkSpaceY);
+        chunkSpaceY = Mathf.Min(chunkSpaceY, GameMap.chunkHeight);
 
         return new Vector2Int(chunkSpaceX, chunkSpaceY);
     }
@@ -371,6 +368,12 @@ public class GameMap : MonoBehaviour
 
         int xIndex = Mathf.FloorToInt((float)adjustedCellPos.x / (float)GameMap.chunkWidth);
         int yIndex = Mathf.FloorToInt((float)-adjustedCellPos.y / (float)GameMap.chunkHeight);
+
+        xIndex = Mathf.Max(0, xIndex);
+        xIndex = Mathf.Min(xIndex, 2);
+
+        yIndex = Mathf.Max(0, yIndex);
+        yIndex = Mathf.Min(yIndex, 2);
 
         return new Vector2Int(xIndex, yIndex);
 

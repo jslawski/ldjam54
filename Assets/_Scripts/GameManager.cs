@@ -41,17 +41,19 @@ public class GameManager : MonoBehaviour
         StartCoroutine(this.Heartbeat());
     }
 
+
+
     private IEnumerator Heartbeat()
     {
         while (true)
         {            
-            yield return new WaitForSeconds(5.0f);
+            yield return new WaitForSeconds(2.0f);
             
             GameMap.instance.SaveLatestMap();
             
-            //yield return new WaitForSeconds(5.0f);
+            yield return new WaitForSeconds(5.0f);
 
-            //GameMap.instance.LoadMap();
+            GameMap.instance.LoadMap();
         }
     }
 
