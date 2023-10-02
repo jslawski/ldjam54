@@ -39,6 +39,8 @@ public class GameMap : MonoBehaviour
     [SerializeField]
     private TextAsset[] mapChunkFiles;
 
+    public bool isSetup = false;
+
     private void Awake()
     {
         if (instance == null)
@@ -94,7 +96,7 @@ public class GameMap : MonoBehaviour
 
                 yield return null;
             }
-        }
+        }        
     }
 
     private void LoadChunk(int x, int y)
@@ -274,6 +276,8 @@ public class GameMap : MonoBehaviour
         {
             return;
         }
+
+        this.isSetup = true;
 
         List<Vector3Int> targetCells = new List<Vector3Int>();
 

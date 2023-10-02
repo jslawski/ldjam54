@@ -15,20 +15,21 @@ public class SpawnPoint : MonoBehaviour
     private List<Vector3Int> cellIndices;
 
     [SerializeField]
+    private Grid gameGrid;
+
+    [SerializeField]
     private Tilemap gameMap;
 
     public Team owner = Team.None;
 
     public float captureThreshold = 1.0f;
+    
+    public int spawnID;
 
-    [SerializeField]
-    private int spawnID;
-
-    private bool isSetup = false;
+    public bool isSetup = false;
 
     private void Start()
     {
-        this.SpawnPlayerCharacter();
         this.Setup();
     }
 
@@ -42,10 +43,9 @@ public class SpawnPoint : MonoBehaviour
 
     private void Setup()
     {
-        this.gameMap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
         this.cellIndices = new List<Vector3Int>();
 
-        Vector3Int spawnPosition = this.gameMap.WorldToCell(this.transform.position);
+        Vector3Int spawnPosition = this.gameGrid.WorldToCell(this.transform.position);
 
         Vector3Int lowerLeft = new Vector3Int(spawnPosition.x - (this.spawnPointSize / 2), spawnPosition.y - (this.spawnPointSize / 2));        
 
@@ -81,7 +81,7 @@ public class SpawnPoint : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (this.isSetup == false)
+        if (this.isSetup == false || GameMap.instance.isSetup == false)
         {
             return;
         }
@@ -91,6 +91,8 @@ public class SpawnPoint : MonoBehaviour
 
     private void UpdateOwner(Team newOwner)
     {
+        Debug.Log("NEW OWNER! " + newOwner);
+
         StartCoroutine(this.SendOwnerUpdate(newOwner));
     }
 
@@ -128,6 +130,11 @@ public class SpawnPoint : MonoBehaviour
         for (int i = 0; i < this.cellIndices.Count; i++)
         {            
             TileBase currentTile = this.gameMap.GetTile(this.cellIndices[i]);
+
+            if (currentTile == null)
+            {
+                continue;
+            }
 
             if (currentTile.name == "Team1Tile")
             {

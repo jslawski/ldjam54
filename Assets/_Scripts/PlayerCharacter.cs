@@ -19,31 +19,12 @@ public class PlayerCharacter : MonoBehaviour
     // Start is called before the first frame update
     public void Setup()
     {
-        this.playerTeam = (Team)Random.Range(1, 3);
+        this.playerTeam = GameManager.instance.team;
 
         this.SetupPlayerModel();
 
         this.BeginCameraFollow();
         
-        //StartCoroutine(this.SetupCoroutine());
-    }
-    
-    private IEnumerator SetupCoroutine()
-    {
-        string fullURL = TwitchSecrets.ServerName + "/getPlayerTeam.php";
-
-        WWWForm form = new WWWForm();
-
-        form.AddField("playerID", PlayerPrefs.GetInt("playerID"));
-
-        using (UnityWebRequest www = UnityWebRequest.Post(fullURL, form))
-        {
-            yield return www.SendWebRequest();
-
-            this.playerTeam = (Team)int.Parse(www.downloadHandler.text);
-        }
-
-        this.BeginCameraFollow();
     }
 
     private void SetupPlayerModel()

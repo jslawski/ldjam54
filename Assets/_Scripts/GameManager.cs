@@ -6,7 +6,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    
+
+    public Team team;
+
     private void Awake()
     {
         if (instance == null)
@@ -19,6 +21,14 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         this.SetupGame();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.P))
+        {
+            PlayerPrefs.DeleteKey("playerID");
+        }
     }
 
     private void SetupGame()
