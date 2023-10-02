@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
+
+        this.team = (Team)PlayerPrefs.GetInt("team", -1);
     }
 
     // Start is called before the first frame update
@@ -38,21 +40,24 @@ public class GameManager : MonoBehaviour
 
     public void StartHeartbeat()
     {
-        StartCoroutine(this.Heartbeat());
+        StartCoroutine(this.SaveHeartbeat());
+        StartCoroutine(this.LoadHeartbeat());
     }
 
-
-
-    private IEnumerator Heartbeat()
+    public IEnumerator SaveHeartbeat()
     {
         while (true)
-        {            
-            yield return new WaitForSeconds(2.0f);
-            
-            GameMap.instance.SaveLatestMap();
-            
+        {
             yield return new WaitForSeconds(5.0f);
+            GameMap.instance.SaveLatestMap();
+        }
+    }
 
+    private IEnumerator LoadHeartbeat()
+    {
+        while (true)
+        {                        
+            yield return new WaitForSeconds(30.0f);
             GameMap.instance.LoadMap();
         }
     }

@@ -10,12 +10,48 @@ public class SpawnButton : MonoBehaviour
     public GameObject spawnPointParent;
 
     private SpawnPoint[] spawnPoints;
-    
+
+    [SerializeField]
+    private Image buttonImage;
+
+    private Color buttonColor;
+
+    private Button buttonObject;
+
     private void Start()
     {
         this.spawnPoints = GetComponentsInChildren<SpawnPoint>();
 
+        this.buttonObject = GetComponent<Button>();
+        this.buttonObject.interactable = false;
+
         StartCoroutine(this.WaitForSetup());
+    }
+
+    private void SetButtonColor()
+    {
+        if (this.associatedSpawn.spawnID == 0 || this.associatedSpawn.owner == Team.None)
+        {
+            return;
+        }
+
+        switch (this.associatedSpawn.owner)
+        {
+            case Team.Team1:
+                this.buttonColor = new Color(255, 208, 85, 255);
+                break;
+            case Team.Team2:
+                this.buttonColor = new Color(221, 38, 81, 255);
+                break;
+            case Team.Team3:
+                this.buttonColor = new Color(16, 198, 249, 255);
+                break;
+            default:
+                Debug.LogError("Unknown team: " + this.associatedSpawn.owner);
+                break;
+        }
+
+        this.buttonImage.color = this.buttonColor;
     }
 
     private IEnumerator WaitForSetup()
@@ -53,6 +89,8 @@ public class SpawnButton : MonoBehaviour
             {
                 GetComponent<Button>().interactable = false;
             }
+
+            this.SetButtonColor();
 
             yield return null;
         }
