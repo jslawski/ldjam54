@@ -92,50 +92,14 @@ public class CameraFollow : MonoBehaviour
     {
         yield return new WaitForFixedUpdate();
 
-        this.transform.position = new Vector3(this.playerCharacter.transform.position.x, this.transform.position.y, this.playerCharacter.transform.position.z - 3.0f);
+        this.transform.position = new Vector3(this.playerCharacter.transform.position.x, this.transform.position.y, this.playerCharacter.transform.position.z - 28.7f);
 
         while (followPlayer == true)
         {
-
-            Vector3 playerViewportPosition = thisCamera.WorldToViewportPoint(this.playerCharacter.gameObject.transform.position);
-
-            if (this.playerCharacter != null && this.IsPlayerPastVerticalThreshold(playerViewportPosition.y))
-            {
-                this.UpdateCameraVerticalPosition();
-            }
-
-            if (this.IsPlayerPastHorizontalThreshold(playerViewportPosition.x))
-            {
-                this.UpdateCameraHorizontalPosition();
-            }
+            this.transform.position = new Vector3(this.playerCharacter.transform.position.x, this.transform.position.y, this.playerCharacter.transform.position.z - 28.7f);
 
             yield return new WaitForFixedUpdate();
         }        
-    }
-
-    private IEnumerator SnapToPoint(Vector3 targetPoint)
-    {
-        targetPoint = new Vector3(targetPoint.x, targetPoint.y, targetPoint.z);
-
-        while (this.GetDistance(this.transform.position, targetPoint) > 0.01f)
-        {
-            this.transform.position = Vector3.Lerp(this.transform.position, targetPoint, this.snapSpeed);
-            yield return null;
-        }
-
-        this.transform.position = targetPoint;
-        this.returnZoomInitiated = false;
-        this.zoomedInYValue = this.transform.position.y;
-
-        this.SnapCoroutine = null;
-        this.ImpactZoomCoroutine = null;
-        this.ImpactReturnCoroutine = null;
-    }
-
-    public static void InitiateShowcaseSnap(Vector3 targetPoint)
-    {
-        showcasePoint = new Vector3(targetPoint.x, targetPoint.y, targetPoint.z - (isometricZOffset / 2));
-        followPlayer = false;
     }
 
     public static void ReturnToFollow()
@@ -147,7 +111,7 @@ public class CameraFollow : MonoBehaviour
 
     private void UpdateCameraVerticalPosition()
     {
-        Vector3 worldSpaceCenteredPosition = this.thisCamera.ViewportToWorldPoint(new Vector3(0.5f, this.targetCameraDistance, this.verticalViewportThreshold));
+        Vector3 worldSpaceCenteredPosition = this.thisCamera.ViewportToWorldPoint(new Vector3(0.5f, this.transform.position.y, this.verticalViewportThreshold));
 
         Vector3 shiftVector = new Vector3(0, 0, this.playerCharacter.transform.position.z - worldSpaceCenteredPosition.z);
 
@@ -156,7 +120,7 @@ public class CameraFollow : MonoBehaviour
 
     private void UpdateCameraHorizontalPosition()
     {
-        Vector3 worldSpaceCenteredPosition = this.thisCamera.ViewportToWorldPoint(new Vector3(0.5f, this.targetCameraDistance, this.verticalViewportThreshold));
+        Vector3 worldSpaceCenteredPosition = this.thisCamera.ViewportToWorldPoint(new Vector3(0.5f, this.transform.position.y, this.horizontalViewportThreshold));
 
         Vector3 shiftVector = new Vector3(this.playerCharacter.transform.position.x - worldSpaceCenteredPosition.x, 0, 0);
 

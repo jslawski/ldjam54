@@ -50,9 +50,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   robotModels:
-  - {fileID: 6303538534870219927, guid: 6043c3856c9fcd841a8f693aa74600f7, type: 3}
   - {fileID: 1907037306347299916, guid: 61c78f56f7a7a1a40ba913c739313fca, type: 3}
   - {fileID: 3405492172328002247, guid: a194abe5e56cb3a47a171d76fc66ad37, type: 3}
+  - {fileID: 6303538534870219927, guid: 6043c3856c9fcd841a8f693aa74600f7, type: 3}
   playerTeam: 1
   brushSize: 3
 --- !u!114 &3919526034649298851

@@ -14,6 +14,7 @@ public class SpawnPoint : MonoBehaviour
 
     private List<Vector3Int> cellIndices;
 
+    [SerializeField]
     private Tilemap gameMap;
 
     public Team owner = Team.None;
@@ -22,6 +23,8 @@ public class SpawnPoint : MonoBehaviour
 
     [SerializeField]
     private int spawnID;
+
+    private bool isSetup = false;
 
     private void Start()
     {
@@ -39,6 +42,7 @@ public class SpawnPoint : MonoBehaviour
 
     private void Setup()
     {
+        this.gameMap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
         this.cellIndices = new List<Vector3Int>();
 
         Vector3Int spawnPosition = this.gameMap.WorldToCell(this.transform.position);
@@ -71,10 +75,17 @@ public class SpawnPoint : MonoBehaviour
         }        
 
         this.UpdateVisuals();
+
+        this.isSetup = true;
     }
 
     private void FixedUpdate()
     {
+        if (this.isSetup == false)
+        {
+            return;
+        }
+
         this.UpdateCapturedStatus();
     }
 

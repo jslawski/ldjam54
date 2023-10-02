@@ -69,6 +69,4 @@ public class PlayerMovement : MonoBehaviour
 
         this.rigidBody.velocity = playerVelocity;
     }
-
-    
 }
