@@ -15,8 +15,7 @@ public class SplashMenu : MonoBehaviour
         this.fadePanel.OnFadeSequenceComplete += this.DisplaySplashScreen;
         this.fadePanel.FadeFromBlack();
 
-        //QualitySettings.vSyncCount = 0;
-        //Application.targetFrameRate = 60;
+        Application.targetFrameRate = 60;
     }
 
     private void DisplaySplashScreen()
@@ -34,27 +33,13 @@ public class SplashMenu : MonoBehaviour
 
     private void LoadMainMenu()
     {
-        SceneManager.LoadScene("MenuScene");
-    }
-
-    public void PlayButtonClicked()
-    {
-        if (this.loading == false)
+        if (PlayerPrefs.GetInt("playerID", -1) != -1)
         {
-            this.fadePanel.OnFadeSequenceComplete += this.LoadLevel;
-            this.fadePanel.FadeToBlack();
-            this.loading = true;
+            SceneManager.LoadScene("MainMenu");
         }
-    }
-
-    public void ExitButtonClicked()
-    {
-        Application.Quit();
-    }
-
-    private void LoadLevel()
-    {
-        this.fadePanel.OnFadeSequenceComplete -= this.LoadLevel;
-        SceneManager.LoadScene("GameplayScene");
+        else
+        {
+            SceneManager.LoadScene("CharacterSelect");
+        }
     }
 }
