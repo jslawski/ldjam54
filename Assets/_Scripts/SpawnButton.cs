@@ -38,20 +38,20 @@ public class SpawnButton : MonoBehaviour
         switch (this.associatedSpawn.owner)
         {
             case Team.Team1:
-                this.buttonColor = new Color(255, 208, 85, 255);
+                this.buttonColor = new Color(255.0f, 208.0f, 85.0f, 255.0f);
                 break;
             case Team.Team2:
-                this.buttonColor = new Color(221, 38, 81, 255);
+                this.buttonColor = new Color(221.0f, 38.0f, 81.0f, 255.0f);
                 break;
             case Team.Team3:
-                this.buttonColor = new Color(16, 198, 249, 255);
+                this.buttonColor = new Color(16.0f, 198.0f, 249.0f, 255.0f);
                 break;
             default:
                 Debug.LogError("Unknown team: " + this.associatedSpawn.owner);
                 break;
         }
 
-        this.buttonImage.color = this.buttonColor;
+        this.buttonObject.image.color = this.buttonColor;        
     }
 
     private IEnumerator WaitForSetup()
