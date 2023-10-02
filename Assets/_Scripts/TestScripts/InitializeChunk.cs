@@ -18,6 +18,7 @@ public class InitializeChunk : MonoBehaviour
     {
         string chunkLine = "";
 
+
         for (int k = 0; k < 268; k++)
         {
             chunkLine += "0 ";
