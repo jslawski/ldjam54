@@ -43,7 +43,6 @@ public class PlayerMovement : MonoBehaviour
 
             if (Physics.Raycast(mouseRay, out hit, float.PositiveInfinity, this.collisionLayer, QueryTriggerInteraction.Ignore))
             {
-                Debug.LogError("Raycast Hist " + hit.collider.gameObject.name);
                 Vector3 desiredDirection = hit.point - this.transform.position;
                 desiredPlayerVelocity = desiredDirection.normalized * maxSpeed;
                 desiredMaxSpeedChange = this.maxAcceleration;

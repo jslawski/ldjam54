@@ -31,7 +31,7 @@ public class InitializeChunk : MonoBehaviour
             {
                 string filename = j.ToString() + "_" + i.ToString() + ".txt";
 
-                Debug.LogError("Starting " + filename);
+                //Debug.LogError("Starting " + filename);
 
                 yield return null;
 
@@ -46,7 +46,7 @@ public class InitializeChunk : MonoBehaviour
 
                 writer.Close();
 
-                Debug.LogError("Done with " + filename);
+                //Debug.LogError("Done with " + filename);
 
                 yield return null;
             }

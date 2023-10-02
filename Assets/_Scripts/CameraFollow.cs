@@ -10,7 +10,8 @@ public class CameraFollow : MonoBehaviour
 
     private Camera thisCamera;
     private Transform cameraTransform;
-    private float cameraDistance;
+
+    public float targetCameraDistance;
 
     public float verticalViewportThreshold = 0.5f;
     public float horizontalViewportThreshold = 0.5f;
@@ -38,8 +39,7 @@ public class CameraFollow : MonoBehaviour
     {
         CameraFollow.instance = this;
         this.thisCamera = this.gameObject.GetComponentInChildren<Camera>();
-        this.cameraTransform = this.gameObject.transform;
-        this.cameraDistance = this.cameraTransform.position.y;
+        this.cameraTransform = this.gameObject.transform;        
         this.originalYValue = this.transform.position.y;
 
         isometricZOffset = this.GetIsometricZOffset();
@@ -74,9 +74,20 @@ public class CameraFollow : MonoBehaviour
 
     public void BeginFollow()
     {
+        StartCoroutine(ZoomIn());
         StartCoroutine(this.FollowCoroutine());
     }
-    
+
+    private IEnumerator ZoomIn()
+    {
+        while (Mathf.Abs(this.transform.position.y - this.targetCameraDistance) > 0.1f)
+        {
+            Vector3 targetPoint = new Vector3(this.transform.position.x, this.targetCameraDistance, this.transform.position.z);
+            this.transform.position = Vector3.Lerp(this.transform.position, targetPoint, this.snapSpeed);
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
     private IEnumerator FollowCoroutine()
     {
         yield return new WaitForFixedUpdate();
@@ -85,16 +96,6 @@ public class CameraFollow : MonoBehaviour
 
         while (followPlayer == true)
         {
-            if (this.transform.position.y != this.originalYValue)
-            {
-                if (this.returnZoomInitiated == false)
-                {
-                    StopAllCoroutines();
-                    this.SnapCoroutine = StartCoroutine(this.SnapToPoint(new Vector3(this.transform.position.x, this.originalYValue, this.transform.position.z)));
-                    this.returnZoomInitiated = true;
-                    this.cumulativeYZoom = 0;
-                }                
-            }
 
             Vector3 playerViewportPosition = thisCamera.WorldToViewportPoint(this.playerCharacter.gameObject.transform.position);
 
@@ -146,7 +147,7 @@ public class CameraFollow : MonoBehaviour
 
     private void UpdateCameraVerticalPosition()
     {
-        Vector3 worldSpaceCenteredPosition = this.thisCamera.ViewportToWorldPoint(new Vector3(0.5f, this.cameraDistance, this.verticalViewportThreshold));
+        Vector3 worldSpaceCenteredPosition = this.thisCamera.ViewportToWorldPoint(new Vector3(0.5f, this.targetCameraDistance, this.verticalViewportThreshold));
 
         Vector3 shiftVector = new Vector3(0, 0, this.playerCharacter.transform.position.z - worldSpaceCenteredPosition.z);
 
@@ -155,7 +156,7 @@ public class CameraFollow : MonoBehaviour
 
     private void UpdateCameraHorizontalPosition()
     {
-        Vector3 worldSpaceCenteredPosition = this.thisCamera.ViewportToWorldPoint(new Vector3(0.5f, this.cameraDistance, this.verticalViewportThreshold));
+        Vector3 worldSpaceCenteredPosition = this.thisCamera.ViewportToWorldPoint(new Vector3(0.5f, this.targetCameraDistance, this.verticalViewportThreshold));
 
         Vector3 shiftVector = new Vector3(this.playerCharacter.transform.position.x - worldSpaceCenteredPosition.x, 0, 0);
 

@@ -27,10 +27,6 @@ public class GameManager : MonoBehaviour
     private void SetupGame()
     {
         GameMap.instance.LoadMap();
-
-        this.SpawnPlayer();
-
-        StartCoroutine(this.Heartbeat());
     }
 
     private void SpawnPlayer()
@@ -42,22 +38,27 @@ public class GameManager : MonoBehaviour
         if (offset <= -8)
         {
             playerObject = Instantiate(this.playerPrefab, new Vector3(-5.0f, 0.0f, 0.0f), new Quaternion());
-            playerObject.GetComponent<PlayerCharacter>().Setup(Team.Team1);
+            playerObject.GetComponent<PlayerCharacter>().Setup();
         }
         else if (offset <= -7)
         {
             playerObject = Instantiate(this.playerPrefab, new Vector3(0.0f, 0.0f, -5.0f), new Quaternion());
-            playerObject.GetComponent<PlayerCharacter>().Setup(Team.Team2);
+            playerObject.GetComponent<PlayerCharacter>().Setup();
         }
         else
         {
             playerObject = Instantiate(this.playerPrefab, new Vector3(5.0f, 0.0f, 0.0f), new Quaternion());
-            playerObject.GetComponent<PlayerCharacter>().Setup(Team.Team3);
+            playerObject.GetComponent<PlayerCharacter>().Setup();
         }
 
         CameraFollow.instance.playerCharacter = playerObject.GetComponent<PlayerMovement>();
         CameraFollow.ReturnToFollow();
         CameraFollow.instance.BeginFollow();
+    }
+
+    public void StartHeartbeat()
+    {
+        StartCoroutine(this.Heartbeat());
     }
 
     private IEnumerator Heartbeat()

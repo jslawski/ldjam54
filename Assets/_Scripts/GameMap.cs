@@ -104,7 +104,7 @@ public class GameMap : MonoBehaviour
 
     private IEnumerator LoadChunkCoroutine(MapChunk chunk)
     {
-        Debug.Log("Loading Chunk: " + chunk.chunkID);
+        //Debug.Log("Loading Chunk: " + chunk.chunkID);
 
         int batchSize = 50000;
         int currentBatchSize = 0;
@@ -158,8 +158,8 @@ public class GameMap : MonoBehaviour
             }
         }
 
-        Debug.Log("Done Loading Chunk: " + chunk.chunkID);
-        Debug.LogError("Tiles Changed: " + tilesChanged);
+        //Debug.Log("Done Loading Chunk: " + chunk.chunkID);
+        //Debug.LogError("Tiles Changed: " + tilesChanged);
 
         this.loadedChunks++;
     }
@@ -273,7 +273,7 @@ public class GameMap : MonoBehaviour
 
         chunk.TransferInterimDirtyPoints();
 
-        Debug.LogError("Tiles Saved: " + tilesSaved);
+        //Debug.LogError("Tiles Saved: " + tilesSaved);
     }    
 
     public void UpdateMap(PlayerCharacter player)
