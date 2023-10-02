@@ -4,33 +4,32 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using CharacterCustomizer;
+using UnityEngine.SceneManagement;
 
 public class CharacterSelect : MonoBehaviour
 {
     [SerializeField]
-    private CharacterButton[] buttons;
+    private CharacterButton[] buttons;    
 
-    [SerializeField]
-    private Button confirmButton;
+    public int selectedIndex = -1;    
 
-    public int selectedIndex = -1;
-
-    private Canvas canvasObject;
-
-    [SerializeField]
-    private GameObject spawnButtonsParent;
     [SerializeField]
     private GameObject characterButtonsParent;
+
+    [SerializeField]
+    private FadePanelManager fadeManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        this.canvasObject = GetComponentInParent<Canvas>();
-
         if (PlayerPrefs.GetInt("playerID", -1) != -1)
         {
             this.characterButtonsParent.SetActive(false);
             StartCoroutine(this.RequestTeam());
+        }
+        else
+        {
+            this.fadeManager.FadeFromBlack();
         }
     }
 
@@ -40,24 +39,15 @@ public class CharacterSelect : MonoBehaviour
 
         for (int i = 0; i < this.buttons.Length; i++)
         {
-            if (i == index)
+            if (i == this.selectedIndex)
             {
                 this.buttons[i].buttonObject.interactable = false;
             }
-            else
-            {
-                this.buttons[i].buttonObject.interactable = true;
-            }
         }
 
-        this.confirmButton.interactable = true;
-    }
-
-    public void ConfirmButton()
-    {
         StartCoroutine(this.ConfirmTeam());
     }
-
+    
     private IEnumerator ConfirmTeam()
     {
         string fullURL = TwitchSecrets.ServerName + "/setPlayerTeam.php";
@@ -76,13 +66,12 @@ public class CharacterSelect : MonoBehaviour
 
         using (UnityWebRequest www = UnityWebRequest.Post(fullURL, form))
         {
-            yield return www.SendWebRequest();
+            yield return www.SendWebRequest();            
         }
 
-        this.characterButtonsParent.SetActive(false);
-        this.spawnButtonsParent.SetActive(true);
+        PlayerPrefs.SetInt("team", (int)this.buttons[this.selectedIndex].team);
 
-        GameManager.instance.team = this.buttons[this.selectedIndex].team;
+        this.FadeToMenu();
     }
 
     private IEnumerator RequestTeam()
@@ -98,9 +87,21 @@ public class CharacterSelect : MonoBehaviour
         {
             yield return www.SendWebRequest();
 
-            GameManager.instance.team = (Team)int.Parse(www.downloadHandler.text);
+            PlayerPrefs.SetInt("team", int.Parse(www.downloadHandler.text));            
         }
 
-        this.spawnButtonsParent.SetActive(true);
+        this.FadeToMenu();
+    }
+
+    private void FadeToMenu()
+    {
+        this.fadeManager.OnFadeSequenceComplete += this.TransitionToMainMenu;
+        this.fadeManager.FadeToBlack();
+    }
+
+    private void TransitionToMainMenu()
+    {
+        this.fadeManager.OnFadeSequenceComplete -= this.TransitionToMainMenu;
+        SceneManager.LoadScene("MainMenu");
     }
 }
