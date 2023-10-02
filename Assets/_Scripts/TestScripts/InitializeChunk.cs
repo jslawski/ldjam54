@@ -18,7 +18,7 @@ public class InitializeChunk : MonoBehaviour
     {
         string chunkLine = "";
 
-        for (int k = 0; k < 799; k++)
+        for (int k = 0; k < 268; k++)
         {
             chunkLine += "0 ";
         }
@@ -39,7 +39,7 @@ public class InitializeChunk : MonoBehaviour
 
                 StreamWriter writer = new StreamWriter(path, true);
 
-                for (int k = 0; k < 800; k++)
+                for (int k = 0; k < 269; k++)
                 {
                     writer.WriteLine(chunkLine);
                 }

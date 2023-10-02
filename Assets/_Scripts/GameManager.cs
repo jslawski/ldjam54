@@ -45,13 +45,13 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {            
-            yield return new WaitForSeconds(30.0f);
+            yield return new WaitForSeconds(5.0f);
             
             GameMap.instance.SaveLatestMap();
             
-            yield return new WaitForSeconds(5.0f);
+            //yield return new WaitForSeconds(5.0f);
 
-            GameMap.instance.LoadMap();
+            //GameMap.instance.LoadMap();
         }
     }
 

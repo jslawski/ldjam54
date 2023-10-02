@@ -30,11 +30,11 @@ public class GameMap : MonoBehaviour
 
     int loadedChunks = 0;
 
-    public static int fullMapWidth = 2400;
-    public static int fullMapHeight = 2400;
+    private static int fullMapWidth;
+    private static int fullMapHeight;
 
-    public static int chunkWidth = 800;
-    public static int chunkHeight = 800;
+    private static int chunkWidth;
+    private static int chunkHeight;
 
     [SerializeField]
     private TextAsset[] mapChunkFiles;
@@ -43,6 +43,11 @@ public class GameMap : MonoBehaviour
 
     private void Awake()
     {
+        fullMapHeight = 804;
+        fullMapWidth = 804;
+        chunkWidth = 268;
+        chunkHeight = 268;
+
         if (instance == null)
         {
             instance = this;
@@ -170,10 +175,14 @@ public class GameMap : MonoBehaviour
     {        
         foreach (KeyValuePair<Tuple<int, int>, MapChunk> entry in this.mapChunks)
         {
+            this.UploadChunk(entry.Key.Item1, entry.Key.Item2);
+
+            /*
             if (entry.Value.isDirty == true)
             {
                 this.UploadChunk(entry.Key.Item1, entry.Key.Item2);
             }
+            */
         }
     }
 
@@ -199,18 +208,23 @@ public class GameMap : MonoBehaviour
         
         string[] allChunkLines = File.ReadAllLines(chunk.GetChunkFilePath());
 
-        int batchSize = 25;
+        int batchSize = 1;
         int currentBatchSize = 0;
 
         int tilesSaved = 0;
-        
-        for (int i = 0; i < chunk.dirtyPoints.Count; i++)
+
+        List<Vector3Int> tempList = new List<Vector3Int>(chunk.dirtyPoints);
+
+        for (int i = 0; i < tempList.Count; i++)
         {
             //Get the line
-            string[] lineValues = allChunkLines[chunk.dirtyPoints[i].y].Split(' ');
+
+            //Debug.Log("Chunk: " + chunk.chunkID + " Dirty Point: " + tempList[i]);
+
+            string[] lineValues = allChunkLines[tempList[i].y].Split(' ');
 
             //Replace value in line
-            lineValues[chunk.dirtyPoints[i].x] = chunk.dirtyPoints[i].z.ToString();
+            lineValues[tempList[i].x] = tempList[i].z.ToString();
 
             //Create new string to replace line
             string tempString = "";
@@ -222,7 +236,7 @@ public class GameMap : MonoBehaviour
             tempString += lineValues[lineValues.Length - 1];
 
             //Replace Line
-            allChunkLines[chunk.dirtyPoints[i].y] = tempString;
+            allChunkLines[tempList[i].y] = tempString;
 
             currentBatchSize++;
 
@@ -260,8 +274,6 @@ public class GameMap : MonoBehaviour
 
         }
 
-        chunk.dirtyPoints = new List<Vector3Int>();
-
         chunk.isDirty = false;
         chunk.isUpdating = false;
 
@@ -282,6 +294,8 @@ public class GameMap : MonoBehaviour
         List<Vector3Int> targetCells = new List<Vector3Int>();
 
         Vector3Int cellPosition = this.mapGrid.WorldToCell(player.transform.position);
+
+        //Debug.LogError("Chunk: " + GetChunkIndices(cellPosition));
 
         this.GetTargetCells(cellPosition, player.brushSize, 0, ref targetCells);
 
@@ -331,19 +345,22 @@ public class GameMap : MonoBehaviour
 
         Vector2Int chunkIndices = GameMap.GetChunkIndices(cellPosition);
 
+        //Debug.LogError("Adjusted Cell Space: " + adjustedCellPosX + ", " + adjustedCellPosY);
+        
+
+
         int chunkSpaceX = adjustedCellPosX - (GameMap.chunkWidth * chunkIndices.x);
         int chunkSpaceY = adjustedCellPosY + (GameMap.chunkHeight * (chunkIndices.y + 1));
+
+        //Debug.LogError("Chunk Space: " + chunkSpaceX + ", " + chunkSpaceY);
 
         return new Vector2Int(chunkSpaceX, chunkSpaceY);
     }
 
     public static Vector3Int ChunkToCellSpace(Vector2Int chunkPosition,  Vector2Int chunkIndices)
     {
-        int adjustedCellPosX = chunkPosition.x + (GameMap.chunkWidth * chunkIndices.x);
-        int adjustedCellPosY = chunkPosition.y + (GameMap.chunkHeight * (chunkIndices.y + 1));
-
         int cellPosX = chunkPosition.x + (GameMap.chunkWidth * chunkIndices.x) - (GameMap.fullMapWidth / 2);
-        int cellPosY = chunkPosition.y - (GameMap.chunkHeight * (chunkIndices.y + 1)) + (GameMap.fullMapHeight / 2);        
+        int cellPosY = chunkPosition.y - (GameMap.chunkHeight * (chunkIndices.y +1)) + (GameMap.fullMapHeight / 2);        
 
         return new Vector3Int(cellPosX, cellPosY, 0);
     }

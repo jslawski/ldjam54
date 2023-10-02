@@ -38,6 +38,10 @@ public class MapChunk
 
         Vector2Int chunkSpaceCoord = GameMap.CellToChunkSpace(pointCoord);
 
+        //Debug.LogError("Chunk Index: " + this.chunkID + " Cell: " + pointCoord + " Chunk: " + chunkSpaceCoord);
+
+        //Debug.LogError("Dirty Point Chunk: " + new Vector3Int(chunkSpaceCoord.x, chunkSpaceCoord.y, (int)playerTeam));
+
         if (this.isUpdating == false)
         {
             this.dirtyPoints.Add(new Vector3Int(chunkSpaceCoord.x, chunkSpaceCoord.y, (int)playerTeam));
@@ -50,14 +54,14 @@ public class MapChunk
 
     public void TransferInterimDirtyPoints()
     {
-        this.dirtyPoints = new List<Vector3Int>();
-
-        for (int i = 0; i < this.interimDirtyPoints.Count; i++)
-        {
-            this.dirtyPoints.Add(this.interimDirtyPoints[i]);
-        }
-
+        this.dirtyPoints = new List<Vector3Int>(this.interimDirtyPoints);
+        
         this.interimDirtyPoints = new List<Vector3Int>();
+
+        if (this.dirtyPoints.Count > 0)
+        {
+            this.isDirty = true;
+        }
     }
 
     public void SetupChunk(string chunkID, string chunkData)
