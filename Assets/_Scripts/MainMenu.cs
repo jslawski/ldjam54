@@ -39,28 +39,29 @@ public class MainMenu : MonoBehaviour
 
         if (team == -1)
         {
-            menuImage.sprite = Resources.Load<Sprite>("MainMenu/NPP_mainmenu_blue");
+            menuImage.sprite = Resources.Load<Sprite>("MainMenu/RoverUnder_mainmenu_blue");
         }
 
         switch (team)
         {
             case 1:
-                menuImage.sprite = Resources.Load<Sprite>("MainMenu/NPP_mainmenu_yellow");
+                menuImage.sprite = Resources.Load<Sprite>("MainMenu/RoverUnder_mainmenu_yellow");
                 break;
             case 2:
-                menuImage.sprite = Resources.Load<Sprite>("MainMenu/NPP_mainmenu_red");
+                menuImage.sprite = Resources.Load<Sprite>("MainMenu/RoverUnder_mainmenu_red");
                 break;
             case 3:
-                menuImage.sprite = Resources.Load<Sprite>("MainMenu/NPP_mainmenu_blue");
+                menuImage.sprite = Resources.Load<Sprite>("MainMenu/RoverUnder_mainmenu_blue");
                 break;
             default:
-                menuImage.sprite = Resources.Load<Sprite>("MainMenu/NPP_mainmenu_blue");
+                menuImage.sprite = Resources.Load<Sprite>("MainMenu/RoverUnder_mainmenu_blue");
                 break;
         }
 
         this.fadeManager.FadeFromBlack();
 
         this.StartCoroutine(this.RefreshScore());
+        this.StartCoroutine(this.RefreshMap());
     }
 
     private void Update()
@@ -84,6 +85,17 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("CharacterSelect");
     }
 
+    private IEnumerator RefreshMap()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(5.0f);
+
+            this.gameMap.gameMap.ClearAllTiles();
+            this.gameMap.LoadMap();
+        }
+    }
+
     private IEnumerator RefreshScore()
     {        
         while (true)
@@ -103,12 +115,31 @@ public class MainMenu : MonoBehaviour
                 this.yellowScore.text = currentScore.team1Score.ToString();
             }
             
-            yield return new WaitForSeconds(5.0f);
-
-            //Update tilemap
-            this.gameMap.LoadMap();
-
-            yield return new WaitForSeconds(5.0f);
+            yield return new WaitForSeconds(1.0f);
         }
+    }
+
+    public void StartGame()
+    {
+        this.fadeManager.OnFadeSequenceComplete += this.TransitionToGame;
+        this.fadeManager.FadeToBlack();
+    }
+
+    private void TransitionToGame()
+    {
+        this.fadeManager.OnFadeSequenceComplete -= this.TransitionToGame;
+        SceneManager.LoadScene("SampleScene");
+    }
+
+    public void EndGame()
+    {
+        this.fadeManager.OnFadeSequenceComplete += this.CloseGame;
+        this.fadeManager.FadeToBlack();
+    }
+
+    private void CloseGame()
+    {
+        this.fadeManager.OnFadeSequenceComplete -= this.CloseGame;
+        Application.Quit();
     }
 }

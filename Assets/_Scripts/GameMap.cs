@@ -15,9 +15,8 @@ public class GameMap : MonoBehaviour
     private Dictionary<Tuple<int, int>, int> archivedPoints;
 
     private Dictionary<Tuple<int, int>, MapChunk> mapChunks;
-
-    [SerializeField]
-    private Tilemap gameMap;
+    
+    public Tilemap gameMap;
 
     [SerializeField]
     private Grid mapGrid;
@@ -269,7 +268,7 @@ public class GameMap : MonoBehaviour
 
             yield return www.SendWebRequest();
 
-        }
+        }        
 
         chunk.isDirty = false;
         chunk.isUpdating = false;

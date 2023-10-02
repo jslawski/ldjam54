@@ -2,12 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
     public Team team;
+
+    [SerializeField]
+    private FadePanelManager fadeManager;
 
     private void Awake()
     {
@@ -17,6 +21,9 @@ public class GameManager : MonoBehaviour
         }
 
         this.team = (Team)PlayerPrefs.GetInt("team", -1);
+
+        this.fadeManager.OnFadeSequenceComplete += this.SetupGame;
+        this.fadeManager.FadeFromBlack();
     }
 
     // Start is called before the first frame update
@@ -27,14 +34,22 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.P))
+        if (Input.GetKeyUp(KeyCode.Escape))
         {
-            PlayerPrefs.DeleteKey("playerID");
+            this.fadeManager.OnFadeSequenceComplete += this.ReturnToMenu;
+            this.fadeManager.FadeToBlack();
         }
+    }
+
+    private void ReturnToMenu()
+    {
+        this.fadeManager.OnFadeSequenceComplete -= this.ReturnToMenu;
+        SceneManager.LoadScene("MainMenu");
     }
 
     private void SetupGame()
     {
+        this.fadeManager.OnFadeSequenceComplete -= this.SetupGame;
         GameMap.instance.LoadMap();
     }
 
