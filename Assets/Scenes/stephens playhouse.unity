@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCharacter: {fileID: 1204353542}
   targetCameraDistance: 0
+  targetRotation: 0
   verticalViewportThreshold: 0.5
   horizontalViewportThreshold: 0.5
 --- !u!4 &275987504
@@ -1287,6 +1288,7 @@ MonoBehaviour:
   mapGrid: {fileID: 2077996723}
   teamTiles: []
   mapChunkFiles: []
+  isSetup: 0
 --- !u!1001 &1291109010268711508
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1615,26 +1617,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1398116504461049035, guid: a85be6ceb834f7946b499534beaa8576,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 25b0ea230b6565749afaee4cbe46cfca, type: 2}
-    - target: {fileID: 5129999594401848313, guid: a85be6ceb834f7946b499534beaa8576,
-        type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: 0f44096ad4d8c03409492bd3d8d587f4, type: 2}
-    - target: {fileID: 5613663395490179047, guid: a85be6ceb834f7946b499534beaa8576,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 0f44096ad4d8c03409492bd3d8d587f4, type: 2}
-    - target: {fileID: 8788092635491994006, guid: a85be6ceb834f7946b499534beaa8576,
-        type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: 25b0ea230b6565749afaee4cbe46cfca, type: 2}
     - target: {fileID: 9163478928206056522, guid: a85be6ceb834f7946b499534beaa8576,
         type: 3}
       propertyPath: m_Name
