@@ -5,6 +5,7 @@ public class CameraFollow : MonoBehaviour
 {
     public static CameraFollow instance;
 
+    [HideInInspector]
     public PlayerMovement playerCharacter;
 
     private Camera thisCamera;
@@ -14,7 +15,7 @@ public class CameraFollow : MonoBehaviour
     public float verticalViewportThreshold = 0.5f;
     public float horizontalViewportThreshold = 0.5f;
 
-    private static bool followPlayer = true;
+    private static bool followPlayer = false;
     private static Vector3 showcasePoint;
     private static bool snapInitiated = false;
     private float snapSpeed = 0.3f;
@@ -43,7 +44,6 @@ public class CameraFollow : MonoBehaviour
 
         isometricZOffset = this.GetIsometricZOffset();
         this.cumulativeYZoom = 0;
-        ReturnToFollow();
     }
 
     private float GetIsometricZOffset()
@@ -72,10 +72,18 @@ public class CameraFollow : MonoBehaviour
             (playerViewportYPosition <= (0.0f + this.verticalViewportThreshold));
     }
 
-    void FixedUpdate()
+    public void BeginFollow()
     {
-        //Normally follow the player
-        if (followPlayer == true)
+        StartCoroutine(this.FollowCoroutine());
+    }
+    
+    private IEnumerator FollowCoroutine()
+    {
+        yield return new WaitForFixedUpdate();
+
+        this.transform.position = new Vector3(this.playerCharacter.transform.position.x, this.transform.position.y, this.playerCharacter.transform.position.z - 3.0f);
+
+        while (followPlayer == true)
         {
             if (this.transform.position.y != this.originalYValue)
             {
@@ -85,8 +93,7 @@ public class CameraFollow : MonoBehaviour
                     this.SnapCoroutine = StartCoroutine(this.SnapToPoint(new Vector3(this.transform.position.x, this.originalYValue, this.transform.position.z)));
                     this.returnZoomInitiated = true;
                     this.cumulativeYZoom = 0;
-                }
-                return;
+                }                
             }
 
             Vector3 playerViewportPosition = thisCamera.WorldToViewportPoint(this.playerCharacter.gameObject.transform.position);
@@ -100,17 +107,9 @@ public class CameraFollow : MonoBehaviour
             {
                 this.UpdateCameraHorizontalPosition();
             }
-        }
-        //Otherwise, focus on the midpoint between the player and a latched boi
-        else
-        {
-            if (snapInitiated == false)
-            {
-                StopAllCoroutines();
-                this.SnapCoroutine = StartCoroutine(this.SnapToPoint(showcasePoint));
-                snapInitiated = true;
-            }
-        }
+
+            yield return new WaitForFixedUpdate();
+        }        
     }
 
     private IEnumerator SnapToPoint(Vector3 targetPoint)
@@ -142,7 +141,7 @@ public class CameraFollow : MonoBehaviour
     {
         showcasePoint = Vector3.zero;
         followPlayer = true;
-        snapInitiated = false;
+        snapInitiated = false;        
     }
 
     private void UpdateCameraVerticalPosition()

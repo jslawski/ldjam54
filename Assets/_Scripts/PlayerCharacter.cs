@@ -6,34 +6,26 @@ using UnityEngine.Tilemaps;
 public enum Team { None, Team1, Team2, Team3 };
 
 public class PlayerCharacter : MonoBehaviour
-{
-    public Team playerTeam;
+{    
+    public Team playerTeam = Team.None;
 
-    public TileBase teamTile;
+    public int brushSize = 1;
 
     // Start is called before the first frame update
-    void Start()
+    public void Setup(Team selectedTeam)
     {
-        switch (this.playerTeam)
-        {
-            case Team.Team1:
-                this.teamTile = Resources.Load<TileBase>("Tiles/Team1Tile");
-                break;
-            case Team.Team2:
-                this.teamTile = Resources.Load<TileBase>("Tiles/Team2Tile");
-                break;
-            case Team.Team3:
-                this.teamTile = Resources.Load<TileBase>("Tiles/Team3Tile");
-                break;
-            default:
-                Debug.LogError("Unknown team: " + this.playerTeam);
-                break;
-        }
+        this.playerTeam = selectedTeam;
     }
+
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (this.playerTeam == Team.None)
+        {
+            return;
+        }
+
         GameMap.instance.UpdateMap(this);
     }
 }
