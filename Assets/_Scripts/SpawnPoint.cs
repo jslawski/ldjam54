@@ -28,6 +28,12 @@ public class SpawnPoint : MonoBehaviour
 
     public bool isSetup = false;
 
+    [SerializeField]
+    private MeshRenderer emblemRenderer;
+
+    [SerializeField]
+    private MeshRenderer targetRenderer;
+
     private void Start()
     {
         this.Setup();
@@ -90,9 +96,7 @@ public class SpawnPoint : MonoBehaviour
     }
 
     private void UpdateOwner(Team newOwner)
-    {
-        Debug.Log("NEW OWNER! " + newOwner);
-
+    {                
         StartCoroutine(this.SendOwnerUpdate(newOwner));
     }
 
@@ -116,7 +120,24 @@ public class SpawnPoint : MonoBehaviour
 
     private void UpdateVisuals()
     {
-        //Do visual update stuff here
+        switch (this.owner)
+        {
+            case Team.Team1:
+                this.emblemRenderer.material = Resources.Load<Material>("Materials/emblemYellow");
+                this.targetRenderer.material = Resources.Load<Material>("Materials/targetGlowYellow");
+                break;
+            case Team.Team2:
+                this.emblemRenderer.material = Resources.Load<Material>("Materials/emblemRed");
+                this.targetRenderer.material = Resources.Load<Material>("Materials/targetGlowRed");
+                break;
+            case Team.Team3:
+                this.emblemRenderer.material = Resources.Load<Material>("Materials/emblemBlue");
+                this.targetRenderer.material = Resources.Load<Material>("Materials/targetGlowBlue");
+                break;
+            default:
+                Debug.LogError("Unknown Team: " + this.owner);
+                break;
+        }
     }
 
     private void UpdateCapturedStatus()

@@ -85,8 +85,10 @@ public class GameMap : MonoBehaviour
                 string chunkID = j.ToString() + "_" + i.ToString();
 
                 string fullURL = TwitchSecrets.ServerName + "/" + chunkID + ".txt";
-                
-                using (UnityWebRequest www = UnityWebRequest.Get(fullURL))
+
+                WWWForm form = new WWWForm();
+
+                using (UnityWebRequest www = UnityWebRequest.Post(fullURL, form))
                 {
                     //Debug.Log("Requesting Chunk: " + j.ToString() + "_" + i.ToString());
 
@@ -112,7 +114,7 @@ public class GameMap : MonoBehaviour
     {
         //Debug.Log("Loading Chunk: " + chunk.chunkID);
 
-        int batchSize = 10000;
+        int batchSize = 5000;
         int currentBatchSize = 0;
 
         int tilesChanged = 0;

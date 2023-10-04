@@ -9887,6 +9887,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3141223634292551113}
+  - component: {fileID: 499756015}
   m_Layer: 0
   m_Name: targetSpawnPointPrefab
   m_TagString: Untagged
@@ -9914,6 +9915,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &499756015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3574259718859928346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f2d7797db1a9f240940556b0b777772, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 3919526034649298848, guid: dc8e3b15d8628a14f83cb9c3cd367754,
+    type: 3}
+  spawnPointSize: 10
+  gameGrid: {fileID: 0}
+  gameMap: {fileID: 0}
+  owner: 0
+  captureThreshold: 1
+  spawnID: 1
+  isSetup: 0
+  emblemRenderer: {fileID: 500911260}
+  targetRenderer: {fileID: 444560502860499114}
 --- !u!1001 &1291109010019832878
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9993,6 +10017,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13b1221802fad5e47bd38efed2bc8382, type: 3}
+--- !u!23 &444560502860499114 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 13b1221802fad5e47bd38efed2bc8382,
+    type: 3}
+  m_PrefabInstance: {fileID: 1291109010019832878}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1612369689717289925 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 13b1221802fad5e47bd38efed2bc8382,
