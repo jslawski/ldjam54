@@ -1,0 +1,41 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+#pragma kernel CSInit
+
+Texture2D<float4>  InputImage;
+SamplerState _LinearClamp;
+
+RWStructuredBuffer<int> ResultBuffer;
+
+[numthreads(1, 1, 1)]
+void CSInit(uint3 id : SV_DispatchThreadID)
+{
+	ResultBuffer[0] = 0;
+	ResultBuffer[1] = 0;
+	ResultBuffer[2] = 0;
+}
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+	float w, h;
+	InputImage.GetDimensions(w, h);
+	float u = id.x / w;
+	float v = id.y / h;
+	float2 uv = float2(u, v);
+	float4 color = InputImage.SampleLevel(_LinearClamp, uv, 0);
+	
+	if (color.r > 0.8f && color.g > 0.3f && color.b > 0.1f)
+	{
+		InterlockedAdd(ResultBuffer[0], 1);
+	}
+	else if (color.r > 0.8f && color.g > 0.0f && color.b > 0.2f)
+	{
+		InterlockedAdd(ResultBuffer[1], 1);
+	}
+	else if (color.r > 0.0f && color.g > 0.5f && color.b > 0.7f)
+	{
+		InterlockedAdd(ResultBuffer[2], 1);
+	} 
+	
+}

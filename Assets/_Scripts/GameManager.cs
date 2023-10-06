@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
@@ -13,6 +14,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private FadePanelManager fadeManager;
 
+    [SerializeField]
+    private Paintable paintableMap;
+
+    public bool postJam = true;
+    
     private void Awake()
     {
         if (instance == null)
@@ -55,16 +61,19 @@ public class GameManager : MonoBehaviour
 
     public void StartHeartbeat()
     {
-        StartCoroutine(this.SaveHeartbeat());
-        StartCoroutine(this.LoadHeartbeat());
+        if (this.postJam == false)
+        {
+            StartCoroutine(this.SaveHeartbeat());
+            StartCoroutine(this.LoadHeartbeat());
+        }
     }
 
     public IEnumerator SaveHeartbeat()
     {
         while (true)
         {
-            yield return new WaitForSeconds(5.0f);
-            GameMap.instance.SaveLatestMap();
+            yield return new WaitForSeconds(1.0f);
+            GameMap.instance.SaveLatestMap();                        
         }
     }
 
@@ -77,4 +86,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public static Color GetScaledColor(float r, float g, float b, float a)
+    {
+        return new Color(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+    }
 }

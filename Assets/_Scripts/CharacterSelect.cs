@@ -22,6 +22,11 @@ public class CharacterSelect : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (Application.isEditor)
+        {
+            PlayerPrefs.SetInt("playerID", 111111);
+        }
+
         if (PlayerPrefs.GetInt("playerID", -1) != -1)
         {
             this.characterButtonsParent.SetActive(false);

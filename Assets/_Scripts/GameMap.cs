@@ -90,11 +90,7 @@ public class GameMap : MonoBehaviour
 
                 using (UnityWebRequest www = UnityWebRequest.Post(fullURL, form))
                 {
-                    //Debug.Log("Requesting Chunk: " + j.ToString() + "_" + i.ToString());
-
                     yield return www.SendWebRequest();
-
-                    //Debug.Log("Obtained Chunk: " + j.ToString() + "_" + i.ToString());
 
                     this.mapChunks[new Tuple<int, int>(j, i)] = new MapChunk(chunkID, www.downloadHandler.text);
                     this.LoadChunk(j, i);
@@ -112,8 +108,6 @@ public class GameMap : MonoBehaviour
 
     private IEnumerator LoadChunkCoroutine(MapChunk chunk)
     {
-        //Debug.Log("Loading Chunk: " + chunk.chunkID);
-
         int batchSize = 5000;
         int currentBatchSize = 0;
 
@@ -154,9 +148,6 @@ public class GameMap : MonoBehaviour
                     Vector2Int chunkIndices = new Vector2Int(chunk.chunkColumn, chunk.chunkRow);
                     Vector3Int cellSpacePoint = GameMap.ChunkToCellSpace(chunkSpaceCoord, chunkIndices);
 
-                    //Debug.LogError("Chunk Space Coord: " + chunkSpaceCoord + "\n" +
-                    //    "CellSpacePoint: " + cellSpacePoint);
-
                     tilesChanged++;
 
                     this.gameMap.SetTile(cellSpacePoint, GameMap.instance.teamTileDict[(Team)tileStatus]);                    
@@ -165,9 +156,6 @@ public class GameMap : MonoBehaviour
                 lineIndex++;
             }
         }
-
-        //Debug.Log("Done Loading Chunk: " + chunk.chunkID);
-        //Debug.LogError("Tiles Changed: " + tilesChanged);
 
         this.loadedChunks++;
     }
@@ -216,9 +204,6 @@ public class GameMap : MonoBehaviour
         for (int i = 0; i < tempList.Count; i++)
         {
             //Get the line
-
-            //Debug.Log("Chunk: " + chunk.chunkID + " Dirty Point: " + tempList[i]);
-
             string[] lineValues = allChunkLines[tempList[i].y].Split(' ');
 
             //Replace value in line
@@ -276,8 +261,6 @@ public class GameMap : MonoBehaviour
         chunk.isUpdating = false;
 
         chunk.TransferInterimDirtyPoints();
-
-        //Debug.LogError("Tiles Saved: " + tilesSaved);
     }    
 
     public void UpdateMap(PlayerCharacter player)
@@ -292,8 +275,6 @@ public class GameMap : MonoBehaviour
         List<Vector3Int> targetCells = new List<Vector3Int>();
 
         Vector3Int cellPosition = this.mapGrid.WorldToCell(player.transform.position);
-
-        //Debug.LogError("Chunk: " + GetChunkIndices(cellPosition));
 
         this.GetTargetCells(cellPosition, player.brushSize, 0, ref targetCells);
 
@@ -377,6 +358,5 @@ public class GameMap : MonoBehaviour
         yIndex = Mathf.Min(yIndex, 2);
 
         return new Vector2Int(xIndex, yIndex);
-
     }
 }

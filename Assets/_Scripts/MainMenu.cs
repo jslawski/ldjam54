@@ -128,7 +128,7 @@ public class MainMenu : MonoBehaviour
     private void TransitionToGame()
     {
         this.fadeManager.OnFadeSequenceComplete -= this.TransitionToGame;
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("GameplayScene");
     }
 
     public void EndGame()

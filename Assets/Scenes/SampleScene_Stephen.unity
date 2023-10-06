@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -391,6 +391,8 @@ MonoBehaviour:
   captureThreshold: 1
   spawnID: 0
   isSetup: 0
+  emblemRenderer: {fileID: 0}
+  targetRenderer: {fileID: 0}
 --- !u!4 &50032874 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3141223634292551113, guid: b03da7ace45230d4090622bbbf4534eb,
@@ -459,7 +461,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -1151,6 +1154,8 @@ MonoBehaviour:
   captureThreshold: 1
   spawnID: 1
   isSetup: 0
+  emblemRenderer: {fileID: 0}
+  targetRenderer: {fileID: 0}
 --- !u!1001 &503802012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1681,7 +1686,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -1915,6 +1921,8 @@ MonoBehaviour:
   captureThreshold: 1
   spawnID: 1
   isSetup: 0
+  emblemRenderer: {fileID: 0}
+  targetRenderer: {fileID: 0}
 --- !u!1001 &722276889
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2099,7 +2107,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2309,6 +2317,8 @@ MonoBehaviour:
   captureThreshold: 1
   spawnID: 1
   isSetup: 0
+  emblemRenderer: {fileID: 0}
+  targetRenderer: {fileID: 0}
 --- !u!1001 &985680235
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2542,6 +2552,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   associatedSpawn: {fileID: 50032873}
   spawnPointParent: {fileID: 50032872}
+  buttonImage: {fileID: 0}
 --- !u!1 &1082493532
 GameObject:
   m_ObjectHideFlags: 0
@@ -2572,6 +2583,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
+  fadeManager: {fileID: 0}
 --- !u!4 &1082493534
 Transform:
   m_ObjectHideFlags: 0
@@ -3121,10 +3133,9 @@ MonoBehaviour:
   - {fileID: 1241852806}
   - {fileID: 1245666141}
   - {fileID: 1422310806}
-  confirmButton: {fileID: 1786786326}
   selectedIndex: -1
-  spawnButtonsParent: {fileID: 708390985}
   characterButtonsParent: {fileID: 550435948}
+  fadeManager: {fileID: 0}
 --- !u!1 &1339615986 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3574259718859928346, guid: b03da7ace45230d4090622bbbf4534eb,
@@ -3158,6 +3169,8 @@ MonoBehaviour:
   captureThreshold: 1
   spawnID: 1
   isSetup: 0
+  emblemRenderer: {fileID: 0}
+  targetRenderer: {fileID: 0}
 --- !u!1 &1422310801
 GameObject:
   m_ObjectHideFlags: 0
@@ -3369,7 +3382,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -3475,6 +3489,8 @@ MonoBehaviour:
   captureThreshold: 1
   spawnID: 1
   isSetup: 0
+  emblemRenderer: {fileID: 0}
+  targetRenderer: {fileID: 0}
 --- !u!1 &1473403144 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3574259718859928346, guid: b03da7ace45230d4090622bbbf4534eb,
@@ -3508,6 +3524,8 @@ MonoBehaviour:
   captureThreshold: 1
   spawnID: 1
   isSetup: 0
+  emblemRenderer: {fileID: 0}
+  targetRenderer: {fileID: 0}
 --- !u!1001 &1529058538
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3625,6 +3643,8 @@ MonoBehaviour:
   captureThreshold: 1
   spawnID: 1
   isSetup: 0
+  emblemRenderer: {fileID: 0}
+  targetRenderer: {fileID: 0}
 --- !u!1 &1589872145 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3574259718859928346, guid: b03da7ace45230d4090622bbbf4534eb,
@@ -3658,6 +3678,8 @@ MonoBehaviour:
   captureThreshold: 1
   spawnID: 1
   isSetup: 0
+  emblemRenderer: {fileID: 0}
+  targetRenderer: {fileID: 0}
 --- !u!1 &1666480426 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3574259718859928346, guid: b03da7ace45230d4090622bbbf4534eb,
@@ -3691,6 +3713,8 @@ MonoBehaviour:
   captureThreshold: 1
   spawnID: 1
   isSetup: 0
+  emblemRenderer: {fileID: 0}
+  targetRenderer: {fileID: 0}
 --- !u!1 &1700787278
 GameObject:
   m_ObjectHideFlags: 0
@@ -3746,6 +3770,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   associatedSpawn: {fileID: 722168228}
   spawnPointParent: {fileID: 708390985}
+  buttonImage: {fileID: 0}
 --- !u!114 &1700787281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3986,7 +4011,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -4310,6 +4336,8 @@ MonoBehaviour:
   captureThreshold: 1
   spawnID: 1
   isSetup: 0
+  emblemRenderer: {fileID: 0}
+  targetRenderer: {fileID: 0}
 --- !u!1 &1955578764
 GameObject:
   m_ObjectHideFlags: 0
@@ -4372,7 +4400,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -4478,6 +4507,8 @@ MonoBehaviour:
   captureThreshold: 1
   spawnID: 1
   isSetup: 0
+  emblemRenderer: {fileID: 0}
+  targetRenderer: {fileID: 0}
 --- !u!1 &2077996721
 GameObject:
   m_ObjectHideFlags: 0
@@ -4583,3 +4614,5 @@ MonoBehaviour:
   captureThreshold: 1
   spawnID: 1
   isSetup: 0
+  emblemRenderer: {fileID: 0}
+  targetRenderer: {fileID: 0}
