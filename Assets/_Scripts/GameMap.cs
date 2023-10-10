@@ -14,7 +14,7 @@ public class GameMap : MonoBehaviour
 
     private Dictionary<Tuple<int, int>, int> archivedPoints;
 
-    private Dictionary<Tuple<int, int>, MapChunk> mapChunks;
+    public Dictionary<Tuple<int, int>, MapChunk> mapChunks;
     
     public Tilemap gameMap;
 
@@ -29,19 +29,21 @@ public class GameMap : MonoBehaviour
 
     int loadedChunks = 0;
 
-    private static int fullMapWidth;
-    private static int fullMapHeight;
+    public static int fullMapWidth;
+    public static int fullMapHeight;
 
-    private static int chunkWidth;
-    private static int chunkHeight;
+    public static int chunkWidth;
+    public static int chunkHeight;
 
     [SerializeField]
     private TextAsset[] mapChunkFiles;
 
-    public bool isSetup = false;
+    public bool isSetup = false;    
 
     private void Awake()
     {
+        Application.targetFrameRate = 30;
+
         fullMapHeight = 804;
         fullMapWidth = 804;
         chunkWidth = 268;
@@ -73,7 +75,7 @@ public class GameMap : MonoBehaviour
         StartCoroutine(this.RequestMapData());
     }
     
-    private IEnumerator RequestMapData()
+    protected IEnumerator RequestMapData()
     {        
         int numChunkColumns = GameMap.fullMapWidth / GameMap.chunkWidth;
         int numChunkRows = GameMap.fullMapHeight / GameMap.chunkHeight;
@@ -94,6 +96,7 @@ public class GameMap : MonoBehaviour
 
                     this.mapChunks[new Tuple<int, int>(j, i)] = new MapChunk(chunkID, www.downloadHandler.text);
                     this.LoadChunk(j, i);
+                    yield return new WaitForSeconds(1.0f);
                 }
 
                 yield return null;
@@ -101,18 +104,18 @@ public class GameMap : MonoBehaviour
         }        
     }
 
-    private void LoadChunk(int x, int y)
+    protected void LoadChunk(int x, int y)
     {
         StartCoroutine(this.LoadChunkCoroutine(this.mapChunks[new Tuple<int, int>(x, y)]));
     }
 
-    private IEnumerator LoadChunkCoroutine(MapChunk chunk)
+    protected virtual IEnumerator LoadChunkCoroutine(MapChunk chunk)
     {
-        int batchSize = 5000;
+        int batchSize = 500;
         int currentBatchSize = 0;
 
         int tilesChanged = 0;
-
+        
         using (StreamReader reader = new StreamReader(chunk.GetChunkFilePath()))
         {
             string currentLine;
@@ -154,7 +157,7 @@ public class GameMap : MonoBehaviour
                 }
 
                 lineIndex++;
-            }
+            }            
         }
 
         this.loadedChunks++;

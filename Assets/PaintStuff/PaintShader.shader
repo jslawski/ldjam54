@@ -1,4 +1,4 @@
-Shader "Jared/PaintShader2"
+Shader "Jared/PaintShader"
 {
 	Properties
 	{
@@ -8,21 +8,20 @@ Shader "Jared/PaintShader2"
 	{
 		Tags
 		{
-			"RenderType" = "Opaque"
-			"Queue" = "Geometry"
+			"RenderType" = "Transparent"
+			"Queue" = "Transparent"
 			"RenderPipeline" = "UniversalPipeline"
 			"LightMode" = "UniversalForward"
 		}
 		//LOD 100
-		ZTest Off
+		ZTest Always
 		ZWrite Off
-		Cull Off
+		//Cull Off
 
-		//BlendOp Add
-		//Blend One One
-
+		//Blend One OneMinusDstColor
+		//Blend SrcAlpha OneMinusSrcAlpha, One One
 		Pass
-		{
+		{		
 			HLSLPROGRAM
 				#pragma vertex vert
 				#pragma fragment frag
@@ -57,8 +56,8 @@ Shader "Jared/PaintShader2"
 				{
 					v2f o;
 
-					float4 uv = float4(0, 0, 0, 1);
-					uv.xy = (v.uv.xy * 2 - 1) * float2(1, _ProjectionParams.x);
+					float4 uv = float4(0.0f, 0.0f, 0.0f, 1.0f);
+					uv.xy = (v.uv.xy * 2.0f - 1.0f) * float2(1.0f, _ProjectionParams.x);
 					o.vertexUV = uv;
 					o.vertexWS = mul(unity_ObjectToWorld, v.vertexOS);
 					o.uv = v.uv;
@@ -78,7 +77,14 @@ Shader "Jared/PaintShader2"
 					float m = mask(i.vertexWS, _ObjPos, _BrushSize, _BrushHardness);
 					float edge = m * _BrushStrength;
 
-					return lerp(col, _BrushColor, edge);
+					float4 result = lerp(col, _BrushColor, edge);
+
+					if (result.r <= 0.51f && result.b <= 0.51f && result.a <= 0.51f)
+					{
+						result.a = 0.0f;
+					}
+
+					return result;
 				}
 
 			ENDHLSL

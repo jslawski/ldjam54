@@ -29,22 +29,22 @@ public class GhostPlayer : MonoBehaviour
         this.paintbrush = GetComponent<PaintBrush>();
         this.paintbrush.paintCanvas = GameObject.Find("DrawPlane").GetComponent<Paintable>();
 
-        switch ((Team)this.playerData.team)
+        switch ((Team)this.playerData.data.team)
         {
             case Team.Team1:
                 robotModel = this.robotModels[0];
-                this.paintbrush.brushColor = GameManager.GetScaledColor(253, 214, 137, 255);
+                this.paintbrush.brushColor = MapManager.instance.team1Color;
                 break;
             case Team.Team2:
                 robotModel = this.robotModels[1];
-                this.paintbrush.brushColor = GameManager.GetScaledColor(255, 87, 130, 255);
+                this.paintbrush.brushColor = MapManager.instance.team2Color;
                 break;
             case Team.Team3:
                 robotModel = this.robotModels[2];
-                this.paintbrush.brushColor = GameManager.GetScaledColor(82, 203, 255, 255);
+                this.paintbrush.brushColor = MapManager.instance.team3Color;
                 break;
             default:
-                Debug.LogError("Unknown Team: " + this.playerData.team);
+                Debug.LogError("Unknown Team: " + this.playerData.data.team);
                 robotModel = this.robotModels[0];
                 break;
         }
@@ -54,14 +54,14 @@ public class GhostPlayer : MonoBehaviour
 
     public void UpdatePlayerData(SinglePlayerData playerData)
     {
-        this.playerData = playerData;
+        this.playerData = new SinglePlayerData(playerData);
     }
 
     // Update is called once per frame
-    private void FixedUpdate()
+    private void Update()
     {
-        Vector3 targetPosition = new Vector3(this.playerData.posX, 0.0f, this.playerData.posY);
-        this.playerTransform.position = Vector3.Lerp(this.playerTransform.position, targetPosition, this.playerData.speed * Time.fixedDeltaTime);
-        this.playerTransform.rotation = Quaternion.Euler(0.0f, this.playerData.rot, 0.0f);
+        Vector3 targetPosition = new Vector3(this.playerData.data.posX, 0.0f, this.playerData.data.posY);
+        this.playerTransform.position = Vector3.Lerp(this.playerTransform.position, targetPosition, this.playerData.data.speed * Time.fixedDeltaTime);
+        this.playerTransform.rotation = Quaternion.Euler(0.0f, this.playerData.data.rot, 0.0f);
     }
 }

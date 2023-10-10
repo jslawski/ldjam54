@@ -6,24 +6,39 @@ public class PaintBrush : MonoBehaviour
 {
     public Paintable paintCanvas;
 
-    [HideInInspector]
+    public Paintable secretCanvas;
+    
     public Color brushColor;
 
     [SerializeField]
-    private float brushHardness;
+    public float brushHardness;
 
     [SerializeField]
-    private float brushStrength;
+    public float brushStrength;
 
     [SerializeField]
-    private float brushSize;
+    public float brushSize;
+
+    public void Setup(Paintable paintCanvas, Color brushColor, float hardness, float strength, float size)
+    {
+        this.paintCanvas = paintCanvas;
+        this.brushColor = brushColor;
+        this.brushHardness = hardness;
+        this.brushStrength = strength;
+        this.brushSize = size;
+    }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (this.paintCanvas != null)
         {
             PaintManager.instance.Paint(this.paintCanvas, this.transform.position, this.brushSize, this.brushHardness, this.brushStrength, this.brushColor);
+        }
+
+        if (this.secretCanvas != null)
+        {
+            PaintManager.instance.Paint(this.secretCanvas, this.transform.position, this.brushSize, this.brushHardness, this.brushStrength, this.brushColor);
         }
     }
     

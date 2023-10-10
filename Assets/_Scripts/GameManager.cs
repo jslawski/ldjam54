@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.Networking;
+using CharacterCustomizer;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,11 +16,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private FadePanelManager fadeManager;
 
-    [SerializeField]
-    private Paintable paintableMap;
-
     public bool postJam = true;
-    
+
     private void Awake()
     {
         if (instance == null)
@@ -56,7 +55,7 @@ public class GameManager : MonoBehaviour
     private void SetupGame()
     {
         this.fadeManager.OnFadeSequenceComplete -= this.SetupGame;
-        GameMap.instance.LoadMap();
+        //GameMap.instance.LoadMap();
     }
 
     public void StartHeartbeat()
@@ -73,7 +72,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1.0f);
-            GameMap.instance.SaveLatestMap();                        
+            //GameMap.instance.SaveLatestMap();
         }
     }
 
@@ -84,10 +83,5 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(30.0f);
             GameMap.instance.LoadMap();
         }
-    }
-
-    public static Color GetScaledColor(float r, float g, float b, float a)
-    {
-        return new Color(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
     }
 }

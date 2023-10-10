@@ -8,8 +8,12 @@ public class PaintManager : MonoBehaviour
     public static PaintManager instance;
 
     public Shader paintShader;
+    public Material paintMaterial;
 
-    private Material paintMaterial;
+    public Shader deltaPaintShader;
+    public Material deltaPaintMaterial;
+
+    public Renderer savedMap;
 
     private CommandBuffer command;
 
@@ -19,6 +23,7 @@ public class PaintManager : MonoBehaviour
     private int radiusID = Shader.PropertyToID("_BrushSize");
     private int colorID = Shader.PropertyToID("_BrushColor");
     private int textureID = Shader.PropertyToID("_MainTex");
+    private int deltaTexureID = Shader.PropertyToID("_DeltaTex");
 
     private void Awake()
     {
@@ -27,7 +32,8 @@ public class PaintManager : MonoBehaviour
             instance = this;
         }
 
-        this.paintMaterial = new Material(paintShader);
+        this.paintMaterial = new Material(this.paintShader);
+        this.deltaPaintMaterial = new Material(this.deltaPaintShader);
 
         this.command = new CommandBuffer();
         this.command.name = "CommandBuffer - " + this.gameObject.name;
@@ -53,6 +59,7 @@ public class PaintManager : MonoBehaviour
     {
         RenderTexture mask = paintableObj.GetMaskTexture();
         RenderTexture support = paintableObj.GetSupportTexture();
+        RenderTexture delta = paintableObj.GetDeltaTexture();
         Renderer rend = paintableObj.GetRenderer();
         
         this.paintMaterial.SetVector(this.positionID, objPos);
@@ -64,19 +71,34 @@ public class PaintManager : MonoBehaviour
 
         this.command.SetRenderTarget(mask);
         this.command.DrawRenderer(rend, this.paintMaterial, 0);
+        //this.command.Blit(mask,this.savedMap.material.GetTexture("_BaseMap"));
 
         this.command.SetRenderTarget(support);
         this.command.Blit(mask, support);
         
-        /*
-        int[] scores = ScoreCalculator.instance.GetScores(support);
-
-        Debug.LogError("Team1: " + scores[0] + "\n" +
-                "Team2: " + scores[1] + "\n" +
-                "Team3: " + scores[2]);
-                */
+        this.command.SetRenderTarget(delta);
+        this.command.Blit(mask, delta);
 
         Graphics.ExecuteCommandBuffer(this.command);
-        command.Clear();
+        this.command.Clear();
+    }
+
+    public void DeltaPaint(Paintable paintableObj)
+    {
+        RenderTexture mask = paintableObj.GetMaskTexture();
+        RenderTexture support = paintableObj.GetSupportTexture();
+        RenderTexture delta = paintableObj.GetDeltaTexture();
+        Renderer rend = paintableObj.GetRenderer();             
+
+        this.deltaPaintMaterial.SetTexture(this.deltaTexureID, mask);
+        this.deltaPaintMaterial.SetTexture(this.textureID, support);
+
+        this.command.SetRenderTarget(delta);
+        this.command.DrawRenderer(rend, this.deltaPaintMaterial, 0);
+
+        this.command.SetRenderTarget(support);
+        this.command.Blit(delta, support, this.deltaPaintMaterial);
+        Graphics.ExecuteCommandBuffer(this.command);
+        this.command.Clear();
     }
 }

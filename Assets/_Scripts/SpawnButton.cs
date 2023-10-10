@@ -38,13 +38,13 @@ public class SpawnButton : MonoBehaviour
         switch (this.associatedSpawn.owner)
         {
             case Team.Team1:
-                this.buttonColor = GameManager.GetScaledColor(255.0f, 208.0f, 85.0f, 255.0f);
+                this.buttonColor = MapManager.instance.team1Color;
                 break;
             case Team.Team2:
-                this.buttonColor = GameManager.GetScaledColor(221.0f, 38.0f, 81.0f, 255.0f);
+                this.buttonColor = MapManager.instance.team2Color;
                 break;
             case Team.Team3:
-                this.buttonColor = GameManager.GetScaledColor(16.0f, 198.0f, 249.0f, 255.0f);
+                this.buttonColor = MapManager.instance.team3Color;
                 break;
             default:
                 Debug.LogError("Unknown team: " + this.associatedSpawn.owner);

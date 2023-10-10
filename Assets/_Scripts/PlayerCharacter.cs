@@ -29,7 +29,7 @@ public class PlayerCharacter : MonoBehaviour
 
         this.playerData = new SinglePlayerData();
         this.playerData.playerID = PlayerPrefs.GetInt("playerID", -1);
-        this.playerData.team = PlayerPrefs.GetInt("team", -1);
+        this.playerData.data.team = PlayerPrefs.GetInt("team", -1);
 
         this.playerTeam = GameManager.instance.team;
         
@@ -46,19 +46,20 @@ public class PlayerCharacter : MonoBehaviour
 
         this.paintbrush = GetComponent<PaintBrush>();
         this.paintbrush.paintCanvas = GameObject.Find("DrawPlane").GetComponent<Paintable>();
+        this.paintbrush.secretCanvas = GameObject.Find("SecretDrawPlane").GetComponent<Paintable>();
 
         switch (this.playerTeam)
         {
             case Team.Team1:
                 robotModel = this.robotModels[0];
-                this.paintbrush.brushColor = GameManager.GetScaledColor(253, 214, 137, 255);
+                this.paintbrush.brushColor = MapManager.instance.team1Color;
                 break;
             case Team.Team2:
-                this.paintbrush.brushColor = GameManager.GetScaledColor(255, 87, 130, 255);
+                this.paintbrush.brushColor = MapManager.instance.team2Color;
                 robotModel = this.robotModels[1];
                 break;
             case Team.Team3:
-                this.paintbrush.brushColor = GameManager.GetScaledColor(82, 203, 255, 255);
+                this.paintbrush.brushColor = MapManager.instance.team3Color;
                 robotModel = this.robotModels[2];
                 break;
             default:
@@ -79,14 +80,15 @@ public class PlayerCharacter : MonoBehaviour
 
     private void UpdatePlayerData()
     {
-        this.playerData.posX = this.transform.position.x;
-        this.playerData.posY = this.transform.position.y;
-        this.playerData.rot = this.transform.rotation.y;
-        this.playerData.speed = this.playerRigidbody.velocity.magnitude;
+        this.playerData.data.posX = this.transform.position.x;
+        this.playerData.data.posY = this.transform.position.z;
+        this.playerData.data.rot = this.transform.rotation.y;
+        this.playerData.data.speed = this.playerRigidbody.velocity.magnitude;
+        this.playerData.data.team = (int)this.playerTeam;
     }
 
     // Update is called once per frame
-    private void FixedUpdate()
+    private void Update()
     {
         if (this.playerTeam == Team.None)
         {
@@ -98,29 +100,6 @@ public class PlayerCharacter : MonoBehaviour
         if (GameManager.instance.postJam == false)
         {
             GameMap.instance.UpdateMap(this);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        this.RemoveFromActivePlayers();
-    }
-
-    private void RemoveFromActivePlayers()
-    {
-        StartCoroutine(this.SendRemovalRequest());
-    }
-
-    private IEnumerator SendRemovalRequest()
-    {
-        string fullURL = TwitchSecrets.ServerName + "/removePlayer.php";
-        
-        WWWForm form = new WWWForm();
-        form.AddField("playerID", this.playerData.playerID);
-
-        using (UnityWebRequest www = UnityWebRequest.Post(fullURL, form))
-        {
-            yield return www.SendWebRequest();
         }
     }
 }

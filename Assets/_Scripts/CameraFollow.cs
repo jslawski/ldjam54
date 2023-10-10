@@ -34,7 +34,9 @@ public class CameraFollow : MonoBehaviour
     private Coroutine ImpactReturnCoroutine;
     private float cumulativeYZoom;
 
-    private static float isometricZOffset;
+    public float isometricZOffset;
+
+
 
     void Awake()
     {
@@ -43,15 +45,15 @@ public class CameraFollow : MonoBehaviour
         this.cameraTransform = this.gameObject.transform;        
         this.originalYValue = this.transform.position.y;
 
-        isometricZOffset = this.GetIsometricZOffset();
+        //isometricZOffset = this.GetIsometricZOffset();
         this.cumulativeYZoom = 0;
     }
-
+    /*
     private float GetIsometricZOffset()
     {
         return Camera.main.transform.position.y * Mathf.Tan(Camera.main.transform.rotation.x);
     }
-
+    */
     private float GetDistance(Vector3 position1, Vector3 position2)
     {
         float xValue = Mathf.Pow(position2.x - position1.x, 2);
@@ -75,6 +77,7 @@ public class CameraFollow : MonoBehaviour
 
     public void BeginFollow()
     {
+        followPlayer = true;
         StartCoroutine(ZoomIn());
         StartCoroutine(RotateIn());
         StartCoroutine(this.FollowCoroutine());
@@ -106,11 +109,11 @@ public class CameraFollow : MonoBehaviour
     {
         yield return new WaitForFixedUpdate();
 
-        this.transform.position = new Vector3(this.playerCharacter.transform.position.x, this.transform.position.y, this.playerCharacter.transform.position.z - 28.7f);
+        this.transform.position = new Vector3(this.playerCharacter.transform.position.x, this.transform.position.y, this.playerCharacter.transform.position.z - this.isometricZOffset);
 
         while (followPlayer == true)
         {
-            this.transform.position = new Vector3(this.playerCharacter.transform.position.x, this.transform.position.y, this.playerCharacter.transform.position.z - 28.7f);
+            this.transform.position = new Vector3(this.playerCharacter.transform.position.x, this.transform.position.y, this.playerCharacter.transform.position.z - this.isometricZOffset);
 
             yield return new WaitForFixedUpdate();
         }        

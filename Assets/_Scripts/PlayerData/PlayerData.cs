@@ -4,18 +4,16 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class SinglePlayerData
+public class SinglePlayerDataValues
 {
-    public int playerID;
     public float posX;
     public float posY;
     public float rot;
     public float speed;
     public int team;
 
-    public SinglePlayerData()
+    public SinglePlayerDataValues()
     {
-        this.playerID = -1;
         this.posX = 0.0f;
         this.posY = 0.0f;
         this.rot = 0.0f;
@@ -23,14 +21,32 @@ public class SinglePlayerData
         this.team = -1;
     }
 
-    public SinglePlayerData(SinglePlayerData dataToCopy)
+    public SinglePlayerDataValues(SinglePlayerDataValues dataToCopy)
     {
-        this.playerID = dataToCopy.playerID;
         this.posX = dataToCopy.posX;
         this.posY = dataToCopy.posY;
         this.rot = dataToCopy.rot;
         this.speed = dataToCopy.speed;
         this.team = dataToCopy.team;
+    }
+}
+
+[Serializable]
+public class SinglePlayerData
+{
+    public int playerID;
+    public SinglePlayerDataValues data;
+
+    public SinglePlayerData()
+    {
+        this.playerID = -1;
+        this.data = new SinglePlayerDataValues();
+    }
+
+    public SinglePlayerData(SinglePlayerData dataToCopy)
+    {
+        this.playerID = dataToCopy.playerID;
+        this.data = new SinglePlayerDataValues(dataToCopy.data);
     }
 }
 

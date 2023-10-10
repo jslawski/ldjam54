@@ -68,18 +68,25 @@ public class MapChunk
     {
         this.chunkID = chunkID;
 
+        Debug.LogError("Loading Chunk: " + chunkID);
+
         string[] chunkIDDigets = chunkID.Split("_");
         this.chunkColumn = int.Parse(chunkIDDigets[0]);
-        this.chunkRow = int.Parse(chunkIDDigets[1]);        
+        this.chunkRow = int.Parse(chunkIDDigets[1]);
 
         File.WriteAllText(this.GetChunkFilePath(), chunkData, Encoding.UTF8);
-        
+
         this.dirtyPoints = new List<Vector3Int>();
         this.interimDirtyPoints = new List<Vector3Int>();
     }
 
     public string GetChunkFilePath()
     {
-        return Application.persistentDataPath + this.chunkID;
+        return Application.persistentDataPath + "\\" + this.chunkID + ".txt";
+    }
+
+    public void ClearChunkMemory()
+    {
+
     }
 }

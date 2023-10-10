@@ -18,7 +18,7 @@ public class GhostPlayerManager : MonoBehaviour
 
     private Dictionary<int, GhostPlayer> ghostPlayersDict;
     
-    private float secondsBetweenUpdates = 3.0f;
+    private float secondsBetweenUpdates = 0.033f;
 
     private void Awake()
     {
@@ -35,7 +35,7 @@ public class GhostPlayerManager : MonoBehaviour
 
     private IEnumerator Heartbeat()
     {
-        while (true)
+        while (false)
         {
             yield return new WaitForSeconds(this.secondsBetweenUpdates);
             this.SendUpdate();
@@ -49,26 +49,23 @@ public class GhostPlayerManager : MonoBehaviour
 
     private IEnumerator PlayerUpdateRequest()
     {
-        string fullURL = TwitchSecrets.ServerName + "/updatePlayers.php";
-
+        string fullURL = TwitchSecrets.ServerName;
         WWWForm form = new WWWForm();
 
         if (this.currentPlayer != null)
         {
+            fullURL += "/updatePlayers.php";
             form.AddField("playerID", this.currentPlayer.playerID);
-            form.AddField("playerData", JsonUtility.ToJson(this.currentPlayer));
+            form.AddField("playerData", JsonUtility.ToJson(this.currentPlayer.data));
         }
         else
         {
-            form.AddField("playerID", -1);
-            form.AddField("playerData", "");
+            fullURL += "/getPlayers.php";
         }
 
         using (UnityWebRequest www = UnityWebRequest.Post(fullURL, form))
         {
             yield return www.SendWebRequest();
-
-            Debug.LogError("Data: " + www.downloadHandler.text);
 
             this.UpdateGhostPlayers(www.downloadHandler.text);
         }
@@ -106,7 +103,8 @@ public class GhostPlayerManager : MonoBehaviour
 
     private void CreateNewGhostPlayer(SinglePlayerData playerData)
     {
-        GameObject ghostPlayerInstance = Instantiate(this.ghostPlayerPrefab, this.transform);
+        Vector3 instantiationPosition = new Vector3(playerData.data.posX, 0.0f, playerData.data.posY);
+        GameObject ghostPlayerInstance = Instantiate(this.ghostPlayerPrefab, instantiationPosition, new Quaternion(), this.transform);
         GhostPlayer ghostPlayerComponent = ghostPlayerInstance.GetComponent<GhostPlayer>();
         ghostPlayerComponent.Setup(playerData);
         this.ghostPlayersDict[ghostPlayerComponent.playerData.playerID] = ghostPlayerComponent;

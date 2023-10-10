@@ -22,8 +22,6 @@ public class ScoreCalculator : MonoBehaviour
 
     public int[] GetScores(RenderTexture mapTexture)
     {
-        Debug.LogError("Width: " + mapTexture.width + " Height: " + mapTexture.height);
-
         this.kernalMain = this.scoreShader.FindKernel("CSMain");
         this.kernalInit = this.scoreShader.FindKernel("CSInit");
         this.scoreBuffer = new ComputeBuffer(1, sizeof(int) * 3);

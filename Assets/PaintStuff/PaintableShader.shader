@@ -15,10 +15,13 @@ Shader "Jared/PaintableShader"
 			"LightMode" = "UniversalForward"
 		}
 
+		//ZTest Always
+		//Blend One Zero
 		Pass
-		{
-			Blend SrcAlpha OneMinusSrcAlpha	
-		
+		{				
+			//Blend SrcAlpha DstAlpha
+		//Blend SrcAlpha OneMinusSrcAlpha, One One
+		Blend SrcAlpha OneMinusSrcAlpha
 			HLSLPROGRAM
 				#pragma vertex vert
 				#pragma fragment frag

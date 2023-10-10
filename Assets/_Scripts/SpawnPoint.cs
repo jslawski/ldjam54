@@ -87,7 +87,7 @@ public class SpawnPoint : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (this.isSetup == false || GameMap.instance.isSetup == false)
+        if (this.isSetup == false)// || GameMap.instance.isSetup == false)
         {
             return;
         }
@@ -134,8 +134,7 @@ public class SpawnPoint : MonoBehaviour
                 this.emblemRenderer.material = Resources.Load<Material>("Materials/emblemBlue");
                 this.targetRenderer.material = Resources.Load<Material>("Materials/targetGlowBlue");
                 break;
-            default:
-                Debug.LogError("Unknown Team: " + this.owner);
+            default:                
                 break;
         }
     }

@@ -32,8 +32,8 @@ Transform:
   m_GameObject: {fileID: 3919526034649298848}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -56,6 +56,14 @@ MonoBehaviour:
   - {fileID: 3405492172328002247, guid: a194abe5e56cb3a47a171d76fc66ad37, type: 3}
   playerTeam: 1
   brushSize: 3
+  playerData:
+    playerID: -1
+    data:
+      posX: 0
+      posY: 0
+      rot: 0
+      speed: 0
+      team: -1
 --- !u!114 &3919526034649298851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,9 +76,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c2082a14b2f77848a62d828772ce859, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 20
-  maxAcceleration: 90
-  maxDeceleration: 60
+  maxSpeed: 0.75
+  maxAcceleration: 2.7
+  maxDeceleration: 1.8
   collisionLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -166,7 +174,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   paintCanvas: {fileID: 0}
+  secretCanvas: {fileID: 0}
   brushColor: {r: 1, g: 0, b: 0, a: 1}
   brushHardness: 0.5
   brushStrength: 1
-  brushSize: 3.5
+  brushSize: 0.09
