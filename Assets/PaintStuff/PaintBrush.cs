@@ -6,8 +6,8 @@ public class PaintBrush : MonoBehaviour
 {
     public Paintable paintCanvas;
 
-    public Paintable secretCanvas;
-    
+    public Paintable secondaryCanvas;
+
     public Color brushColor;
 
     [SerializeField]
@@ -36,10 +36,25 @@ public class PaintBrush : MonoBehaviour
             PaintManager.instance.Paint(this.paintCanvas, this.transform.position, this.brushSize, this.brushHardness, this.brushStrength, this.brushColor);
         }
 
-        if (this.secretCanvas != null)
+        if (this.secondaryCanvas != null)
         {
-            PaintManager.instance.Paint(this.secretCanvas, this.transform.position, this.brushSize, this.brushHardness, this.brushStrength, this.brushColor);
+            PaintManager.instance.Paint(this.secondaryCanvas, this.transform.position, this.brushSize, this.brushHardness, this.brushStrength, this.brushColor);
         }
     }
-    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "SpawnPoint")
+        {
+            this.secondaryCanvas = other.gameObject.GetComponentInChildren<Paintable>();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "SpawnPoint")
+        {
+            this.secondaryCanvas = null;
+        }
+    }
 }

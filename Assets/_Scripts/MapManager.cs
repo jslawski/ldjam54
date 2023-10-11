@@ -10,22 +10,11 @@ using UnityEngine.Rendering;
 public class MapManager : MonoBehaviour
 {
     public static MapManager instance;
-    
-    public Color team1Color;
-    public Color team2Color;
-    public Color team3Color;
+
+    public Color[] teamColors;
 
     [SerializeField]
     private Paintable paintableMap;
-    [SerializeField]
-    private Paintable paintableDelta;
-
-    [SerializeField]
-    private Texture2D paintableTexture;
-
-    [SerializeField]
-    private Material saveMaterial;
-    private RenderTexture saveTexture;
 
     #region Unity Functions
     private void Awake()
@@ -38,27 +27,16 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
-        this.saveTexture = (RenderTexture)this.saveMaterial.GetTexture("_BaseMap");
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.S))
-        {
-            this.SaveLatestMap();
-        }
-        if (Input.GetKeyUp(KeyCode.L))
-        {
-            this.LoadLatestMap();
-        }
-    }
-    
-    private void OnDestroy()
-    {     
+        this.LoadLatestMap();
     }
     #endregion
 
     #region Public Functions
+    public void StartHeartbeat()
+    {
+        StartCoroutine(this.Heartbeat());
+    }
+
     public void SaveLatestMap()
     {
         StartCoroutine(this.PreSaveLoadMap());
@@ -72,6 +50,15 @@ public class MapManager : MonoBehaviour
 
 
     #region Network Request Coroutines
+    private IEnumerator Heartbeat()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(5.0f);
+            this.SaveLatestMap();
+        }
+    }
+    
     //Load the latest map from the server
     private IEnumerator PreSaveLoadMap()
     {
@@ -86,20 +73,20 @@ public class MapManager : MonoBehaviour
             this.WriteLoadedMapToTexture(www.downloadHandler.data);
             this.AppendNewDataToLoadedMap(www.downloadHandler.data);
         }
-        this.Cleanup();
-        //StartCoroutine(this.UploadMap());
+
+        StartCoroutine(this.UploadMap());
     }
 
     private IEnumerator UploadMap()
     {
         RenderTexture mapRendTex = this.paintableMap.GetSupportTexture();
 
-        Texture2D savedMapTexture = new Texture2D(mapRendTex.width, mapRendTex.height, TextureFormat.RGBA32, false, true);
+        Texture2D savedMapTexture = new Texture2D(mapRendTex.width, mapRendTex.height, TextureFormat.RGBA32, false, false);
         RenderTexture.active = mapRendTex;
         savedMapTexture.ReadPixels(new Rect(0, 0, mapRendTex.width, mapRendTex.height), 0, 0);
         savedMapTexture.Apply();
         RenderTexture.active = null;
-        
+
         string fullURL = TwitchSecrets.ServerName + "/uploadMap.php";
         WWWForm form = new WWWForm();
         form.AddBinaryData("mapData", savedMapTexture.EncodeToPNG(), "mapData.png");
@@ -110,7 +97,7 @@ public class MapManager : MonoBehaviour
 
         Destroy(savedMapTexture);
 
-        this.Cleanup();
+        this.FinishSave();
     }
 
     private IEnumerator LoadMap()
@@ -142,7 +129,7 @@ public class MapManager : MonoBehaviour
 
         Graphics.Blit(loadedMapTexture, supportTexture);
 
-        File.WriteAllBytes(Application.dataPath + "/mapDataLoaded.png", loadedMapTexture.EncodeToPNG());
+        //File.WriteAllBytes(Application.dataPath + "/mapDataLoaded.png", loadedMapTexture.EncodeToPNG());
 
         Destroy(loadedMapTexture);
     }
@@ -152,22 +139,32 @@ public class MapManager : MonoBehaviour
         PaintManager.instance.DeltaPaint(this.paintableMap);
     }
 
-    private void Cleanup()
+    private void FinishSave()
     {
         RenderTexture rendTex = this.paintableMap.GetSupportTexture();
 
         //Update the texture displaying in game
-        Texture2D savedMapTexture = new Texture2D(this.paintableMap.TEXTURE_SIZE, this.paintableMap.TEXTURE_SIZE, TextureFormat.RGBA32, 11, true);
+        Texture2D savedMapTexture = new Texture2D(this.paintableMap.TEXTURE_SIZE, this.paintableMap.TEXTURE_SIZE, TextureFormat.RGBA32, 11, false);
         RenderTexture.active = rendTex;
         savedMapTexture.ReadPixels(new Rect(0, 0, rendTex.width, rendTex.height), 0, 0);
         savedMapTexture.Apply();
         RenderTexture.active = null;
-        Graphics.CopyTexture(savedMapTexture, this.paintableTexture);
 
-        File.WriteAllBytes(Application.dataPath + "/mapDataSaved.png", savedMapTexture.EncodeToPNG());
+        Graphics.Blit(savedMapTexture, rendTex);
 
-        this.paintableDelta.Clear();
+        //File.WriteAllBytes(Application.dataPath + "/mapDataSaved.png", savedMapTexture.EncodeToPNG());
+
+        this.paintableMap.ClearDelta();
         Destroy(savedMapTexture);
+
+        int[] teamScores = ScoreCalculator.instance.GetScores(this.paintableMap.GetSupportTexture());
+
+        Debug.LogError(this.gameObject.name + "\n" +
+                "Team1: " + teamScores[0] +  "\n" +
+                "Team2: " + teamScores[1] +  "\n" +
+                "Team3: " + teamScores[2]);
     }    
+
+
     #endregion
 }

@@ -27,14 +27,7 @@ public class GameManager : MonoBehaviour
 
         this.team = (Team)PlayerPrefs.GetInt("team", -1);
 
-        this.fadeManager.OnFadeSequenceComplete += this.SetupGame;
         this.fadeManager.FadeFromBlack();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        this.SetupGame();
     }
 
     private void Update()
@@ -52,21 +45,22 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    private void SetupGame()
-    {
-        this.fadeManager.OnFadeSequenceComplete -= this.SetupGame;
-        //GameMap.instance.LoadMap();
-    }
-
     public void StartHeartbeat()
     {
+        MapManager.instance.StartHeartbeat();
+        /*
         if (this.postJam == false)
         {
             StartCoroutine(this.SaveHeartbeat());
             StartCoroutine(this.LoadHeartbeat());
         }
+        else
+        {
+            MapManager.instance.StartHeartbeat();
+        }
+        */
     }
-
+    /*
     public IEnumerator SaveHeartbeat()
     {
         while (true)
@@ -84,4 +78,5 @@ public class GameManager : MonoBehaviour
             GameMap.instance.LoadMap();
         }
     }
+    */
 }

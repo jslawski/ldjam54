@@ -33,15 +33,15 @@ public class GhostPlayer : MonoBehaviour
         {
             case Team.Team1:
                 robotModel = this.robotModels[0];
-                this.paintbrush.brushColor = MapManager.instance.team1Color;
+                this.paintbrush.brushColor = MapManager.instance.teamColors[0];
                 break;
             case Team.Team2:
                 robotModel = this.robotModels[1];
-                this.paintbrush.brushColor = MapManager.instance.team2Color;
+                this.paintbrush.brushColor = MapManager.instance.teamColors[1];
                 break;
             case Team.Team3:
                 robotModel = this.robotModels[2];
-                this.paintbrush.brushColor = MapManager.instance.team3Color;
+                this.paintbrush.brushColor = MapManager.instance.teamColors[2];
                 break;
             default:
                 Debug.LogError("Unknown Team: " + this.playerData.data.team);

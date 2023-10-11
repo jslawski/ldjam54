@@ -5,7 +5,7 @@
 Texture2D<float4>  InputImage;
 SamplerState _LinearClamp;
 
-RWStructuredBuffer<int> ResultBuffer;
+RWStructuredBuffer<float> ResultBuffer;
 
 [numthreads(1, 1, 1)]
 void CSInit(uint3 id : SV_DispatchThreadID)
@@ -16,8 +16,8 @@ void CSInit(uint3 id : SV_DispatchThreadID)
 	ResultBuffer[3] = 0;
 }
 
-[numthreads(8,8,1)]
-void CSMain (uint3 id : SV_DispatchThreadID)
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
 {
 	float w, h;
 	InputImage.GetDimensions(w, h);
@@ -26,18 +26,11 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 	float2 uv = float2(u, v);
 	float4 color = InputImage.SampleLevel(_LinearClamp, uv, 0);
 	
-	if (color.r > 0.8f && color.g > 0.3f && color.b > 0.05f)
+	if (color.r > 0.0f && color.g > 0.0f && color.b > 0.0f && color.a > 0.0f)
 	{
-		InterlockedAdd(ResultBuffer[0], 1);
+		ResultBuffer[0] = color.r;
+		ResultBuffer[1] = color.g;
+		ResultBuffer[2] = color.b;
+		ResultBuffer[3] = color.a;
 	}
-	else if (color.r > 0.65f && color.g > 0.0f && color.b > 0.05f)
-	{
-		InterlockedAdd(ResultBuffer[1], 1);
-	}
-	else if (color.r > 0.0f && color.g > 0.5f && color.b > 0.7f)
-	{
-		InterlockedAdd(ResultBuffer[2], 1);
-	} 
-	
-	InterlockedAdd(ResultBuffer[3], 1);
 }

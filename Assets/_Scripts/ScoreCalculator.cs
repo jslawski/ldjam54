@@ -24,8 +24,8 @@ public class ScoreCalculator : MonoBehaviour
     {
         this.kernalMain = this.scoreShader.FindKernel("CSMain");
         this.kernalInit = this.scoreShader.FindKernel("CSInit");
-        this.scoreBuffer = new ComputeBuffer(1, sizeof(int) * 3);
-        this.result = new int[3];
+        this.scoreBuffer = new ComputeBuffer(1, sizeof(int) * 4);
+        this.result = new int[4];
 
         this.scoreShader.SetTexture(this.kernalMain, "InputImage", mapTexture);
         this.scoreShader.SetTexture(this.kernalInit, "InputImage", mapTexture);

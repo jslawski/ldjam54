@@ -17,7 +17,7 @@ public class PortMap : GameMap
 
     protected override IEnumerator LoadChunkCoroutine(MapChunk chunk)
     {
-        int batchSize = 15;
+        int batchSize = 10;
         int currentBatchSize = 0;
 
         using (StreamReader reader = new StreamReader(chunk.GetChunkFilePath()))

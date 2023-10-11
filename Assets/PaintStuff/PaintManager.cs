@@ -71,7 +71,6 @@ public class PaintManager : MonoBehaviour
 
         this.command.SetRenderTarget(mask);
         this.command.DrawRenderer(rend, this.paintMaterial, 0);
-        //this.command.Blit(mask,this.savedMap.material.GetTexture("_BaseMap"));
 
         this.command.SetRenderTarget(support);
         this.command.Blit(mask, support);

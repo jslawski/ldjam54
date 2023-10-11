@@ -10,19 +10,12 @@ public class SpawnPoint : MonoBehaviour
     [SerializeField]
     GameObject playerPrefab;
 
-    public int spawnPointSize = 10;
-
-    private List<Vector3Int> cellIndices;
-
     [SerializeField]
-    private Grid gameGrid;
-
-    [SerializeField]
-    private Tilemap gameMap;
+    private Paintable paintableArea;
 
     public Team owner = Team.None;
 
-    public float captureThreshold = 1.0f;
+    public float captureThreshold = 0.75f;
     
     public int spawnID;
 
@@ -35,7 +28,7 @@ public class SpawnPoint : MonoBehaviour
     private MeshRenderer targetRenderer;
 
     private void Start()
-    {
+    {        
         this.Setup();
     }
 
@@ -49,20 +42,6 @@ public class SpawnPoint : MonoBehaviour
 
     private void Setup()
     {
-        this.cellIndices = new List<Vector3Int>();
-
-        Vector3Int spawnPosition = this.gameGrid.WorldToCell(this.transform.position);
-
-        Vector3Int lowerLeft = new Vector3Int(spawnPosition.x - (this.spawnPointSize / 2), spawnPosition.y - (this.spawnPointSize / 2));        
-
-        for (int i = 0; i < this.spawnPointSize / 2; i++)
-        {
-            for (int j = 0; j < this.spawnPointSize / 2; j++)
-            {
-                this.cellIndices.Add(new Vector3Int(lowerLeft.x + j, lowerLeft.y + i));
-            }
-        }
-
         StartCoroutine(this.RequestOwner());
     }
 
@@ -78,7 +57,7 @@ public class SpawnPoint : MonoBehaviour
             yield return www.SendWebRequest();
 
             this.owner = (Team)int.Parse((www.downloadHandler.text));
-        }        
+        }
 
         this.UpdateVisuals();
 
@@ -87,7 +66,7 @@ public class SpawnPoint : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (this.isSetup == false)// || GameMap.instance.isSetup == false)
+        if (this.isSetup == false)
         {
             return;
         }
@@ -96,8 +75,12 @@ public class SpawnPoint : MonoBehaviour
     }
 
     private void UpdateOwner(Team newOwner)
-    {                
-        StartCoroutine(this.SendOwnerUpdate(newOwner));
+    {
+        if (newOwner != this.owner)
+        {
+            this.owner = newOwner;
+            StartCoroutine(this.SendOwnerUpdate(newOwner));
+        }
     }
 
     private IEnumerator SendOwnerUpdate(Team newOwner)
@@ -113,82 +96,83 @@ public class SpawnPoint : MonoBehaviour
             yield return www.SendWebRequest();            
         }
 
-        this.owner = newOwner;
-
         this.UpdateVisuals();
     }
 
     private void UpdateVisuals()
     {
+        Debug.LogError("Owner Updated: " + this.owner);
+
         switch (this.owner)
         {
             case Team.Team1:
+                this.emblemRenderer.enabled = true;
                 this.emblemRenderer.material = Resources.Load<Material>("Materials/emblemYellow");
                 this.targetRenderer.material = Resources.Load<Material>("Materials/targetGlowYellow");
                 break;
             case Team.Team2:
+                this.emblemRenderer.enabled = true;
                 this.emblemRenderer.material = Resources.Load<Material>("Materials/emblemRed");
                 this.targetRenderer.material = Resources.Load<Material>("Materials/targetGlowRed");
                 break;
             case Team.Team3:
+                this.emblemRenderer.enabled = true;
                 this.emblemRenderer.material = Resources.Load<Material>("Materials/emblemBlue");
                 this.targetRenderer.material = Resources.Load<Material>("Materials/targetGlowBlue");
                 break;
-            default:                
+            case Team.None:
+                this.emblemRenderer.enabled = false;
+                this.targetRenderer.material = Resources.Load<Material>("Materials/targetGlowGrey");
+                break;
+            default:
+                Debug.LogError("Unknown Team: " + this.owner);
                 break;
         }
     }
 
     private void UpdateCapturedStatus()
     {
-        int numSpacesRequiredToCapture = (int)(this.cellIndices.Count / this.captureThreshold);
+        int[] playerScores = this.paintableArea.GetScores();
 
-        int team1Spaces = 0;
-        int team2Spaces = 0;
-        int team3Spaces = 0;
+        int totalPixels = this.paintableArea.TEXTURE_SIZE * this.paintableArea.TEXTURE_SIZE;
 
-        for (int i = 0; i < this.cellIndices.Count; i++)
-        {            
-            TileBase currentTile = this.gameMap.GetTile(this.cellIndices[i]);
+        float[] teamRatios = new float[3];
+        
+        teamRatios[0] = (float)playerScores[0] / (float)totalPixels;
+        teamRatios[1] = (float)playerScores[1] / (float)totalPixels;
+        teamRatios[2] = (float)playerScores[2] / (float)totalPixels;
 
-            if (currentTile == null)
-            {
-                continue;
-            }
-
-            if (currentTile.name == "Team1Tile")
-            {
-                team1Spaces++;
-            }
-            else if (currentTile.name == "Team2Tile")
-            {
-                team2Spaces++;
-            }
-            else if (currentTile.name == "Team3Tile")
-            {
-                team3Spaces++;
-            }
-        }
-
-        if (team1Spaces >= numSpacesRequiredToCapture && this.owner != Team.Team1)
+        //Debug.LogError(this.gameObject.name + " Total Pixels: " + playerScores[3]);
+        /*
+        if (this.gameObject.name == "targetSpawnPointPrefab")
         {
-            this.UpdateOwner(Team.Team1);
+            TestPixelChecker.instance.GetScores(this.paintableArea.GetSupportTexture());
+            Debug.LogError(this.gameObject.name + "\n" +
+                "Team1: " + playerScores[0] + " " + teamRatios[0] + "\n" +
+                "Team2: " + playerScores[1] + " " + teamRatios[1] + "\n" +
+                "Team3: " + playerScores[2] + " " + teamRatios[2]);
         }
-        if (team2Spaces >= numSpacesRequiredToCapture && this.owner != Team.Team2)
+        */
+        int majorityTeamIndex = -1;
+        float biggestRatio = float.NegativeInfinity;
+
+        for (int i = 0; i < teamRatios.Length; i++)
         {
-            this.UpdateOwner(Team.Team2);
+            if (teamRatios[i] > biggestRatio)
+            {
+                majorityTeamIndex = i;
+                biggestRatio = teamRatios[i];
+            }
         }
-        if (team3Spaces >= numSpacesRequiredToCapture && this.owner != Team.Team3)
+
+        if (biggestRatio >= this.captureThreshold)
         {
-            this.UpdateOwner(Team.Team3);
+            PaintManager.instance.Paint(this.paintableArea, this.transform.position, 1.0f, 1.0f, 1.0f, MapManager.instance.teamColors[majorityTeamIndex]);
+            this.UpdateOwner((Team)(majorityTeamIndex + 1));
         }
-        if (team1Spaces < numSpacesRequiredToCapture && 
-            team2Spaces < numSpacesRequiredToCapture && 
-            team3Spaces < numSpacesRequiredToCapture && 
-            this.owner != Team.None)
+        else
         {
             this.UpdateOwner(Team.None);
         }
-
     }
 }

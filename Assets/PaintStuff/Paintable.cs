@@ -36,37 +36,31 @@ public class Paintable : MonoBehaviour
         this.deltaRenderTexture.filterMode = FilterMode.Bilinear;
 
         this.renderer = GetComponent<Renderer>();
-        this.EnableMaskTexture();
+        renderer.material.SetTexture("_MaskTexture", this.maskRenderTexture);
+
 
         PaintManager.instance.InitializeTextures(this);
-    }
-
-    public void EnableDeltaTexture()
-    {
-        renderer.material.SetTexture("_MaskTexture", this.deltaRenderTexture);
-    }
-
-    public void EnableMaskTexture()
-    {
-        renderer.material.SetTexture("_MaskTexture", this.maskRenderTexture);
-    }
+    }    
 
     public int[] GetScores()
     {
         return ScoreCalculator.instance.GetScores(this.supportRenderTexture);
-    }
+    }    
 
-    public void Clear()
+    public void ClearDelta()
     {
         this.maskRenderTexture.Release();
-        this.supportRenderTexture.Release();
-
-        this.InitializePaintable();
+        this.deltaRenderTexture.Release();        
     }
 
     private void OnDestroy()
     {
         this.maskRenderTexture.Release();
         this.supportRenderTexture.Release();
+        this.deltaRenderTexture.Release();
+
+        Destroy(this.maskRenderTexture);
+        Destroy(this.supportRenderTexture);
+        Destroy(this.deltaRenderTexture);
     }
 }

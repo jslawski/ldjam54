@@ -46,20 +46,19 @@ public class PlayerCharacter : MonoBehaviour
 
         this.paintbrush = GetComponent<PaintBrush>();
         this.paintbrush.paintCanvas = GameObject.Find("DrawPlane").GetComponent<Paintable>();
-        this.paintbrush.secretCanvas = GameObject.Find("SecretDrawPlane").GetComponent<Paintable>();
 
         switch (this.playerTeam)
         {
             case Team.Team1:
                 robotModel = this.robotModels[0];
-                this.paintbrush.brushColor = MapManager.instance.team1Color;
+                this.paintbrush.brushColor = MapManager.instance.teamColors[0];
                 break;
             case Team.Team2:
-                this.paintbrush.brushColor = MapManager.instance.team2Color;
+                this.paintbrush.brushColor = MapManager.instance.teamColors[1];
                 robotModel = this.robotModels[1];
                 break;
             case Team.Team3:
-                this.paintbrush.brushColor = MapManager.instance.team3Color;
+                this.paintbrush.brushColor = MapManager.instance.teamColors[2];
                 robotModel = this.robotModels[2];
                 break;
             default:
@@ -96,10 +95,11 @@ public class PlayerCharacter : MonoBehaviour
         }
 
         this.UpdatePlayerData();
-
+        /*
         if (GameManager.instance.postJam == false)
         {
             GameMap.instance.UpdateMap(this);
         }
+        */
     }
 }

@@ -408,6 +408,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d5b880900a595e4595206488a9eb13f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TEXTURE_SIZE: 1024
+  maskRenderTexture: {fileID: 0}
+  supportRenderTexture: {fileID: 0}
+  deltaRenderTexture: {fileID: 0}
   depth: 0
 --- !u!23 &376388154
 MeshRenderer:
@@ -798,6 +802,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   paintShader: {fileID: 4800000, guid: 89f25f6d40a3b714e96497b5d0d94d8a, type: 3}
+  paintMaterial: {fileID: 0}
+  deltaPaintShader: {fileID: 4800000, guid: 35e8c706074163d48a695c22889bce40, type: 3}
+  deltaPaintMaterial: {fileID: 0}
+  savedMap: {fileID: 0}
 --- !u!1 &1434715141
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,6 +902,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d5b880900a595e4595206488a9eb13f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TEXTURE_SIZE: 1024
+  maskRenderTexture: {fileID: 0}
+  supportRenderTexture: {fileID: 0}
+  deltaRenderTexture: {fileID: 0}
   depth: 0
 --- !u!1839735485 &1912721306 stripped
 Tilemap:
