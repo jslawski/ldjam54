@@ -2,16 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GhostPlayer : MonoBehaviour
+public class GhostPlayer : PlayerCharacter
 {
-    [SerializeField]
-    private GameObject[] robotModels;
-
-    public SinglePlayerData playerData;
-
     private Transform playerTransform;
-
-    private PaintBrush paintbrush;
 
     public void Setup(SinglePlayerData playerData)
     {
@@ -27,6 +20,7 @@ public class GhostPlayer : MonoBehaviour
         GameObject robotModel;
 
         this.paintbrush = GetComponent<PaintBrush>();
+        this.paintbrush.deltaContributor = false;
         this.paintbrush.paintCanvas = GameObject.Find("DrawPlane").GetComponent<Paintable>();
 
         switch ((Team)this.playerData.data.team)
@@ -61,7 +55,7 @@ public class GhostPlayer : MonoBehaviour
     private void Update()
     {
         Vector3 targetPosition = new Vector3(this.playerData.data.posX, 0.0f, this.playerData.data.posY);
-        this.playerTransform.position = Vector3.Lerp(this.playerTransform.position, targetPosition, this.playerData.data.speed * Time.fixedDeltaTime);
+        this.playerTransform.position = targetPosition;// Vector3.Lerp(this.playerTransform.position, targetPosition, 0.04f);
         this.playerTransform.rotation = Quaternion.Euler(0.0f, this.playerData.data.rot, 0.0f);
     }
 }

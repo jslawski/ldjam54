@@ -38,7 +38,6 @@ public class Paintable : MonoBehaviour
         this.renderer = GetComponent<Renderer>();
         renderer.material.SetTexture("_MaskTexture", this.maskRenderTexture);
 
-
         PaintManager.instance.InitializeTextures(this);
     }    
 
@@ -49,7 +48,7 @@ public class Paintable : MonoBehaviour
 
     public void ClearDelta()
     {
-        this.maskRenderTexture.Release();
+        //this.maskRenderTexture.Release();
         this.deltaRenderTexture.Release();        
     }
 

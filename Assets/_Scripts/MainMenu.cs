@@ -23,9 +23,6 @@ public class MainMenu : MonoBehaviour
     private Image menuImage;
 
     [SerializeField]
-    private GameMap gameMap;
-
-    [SerializeField]
     private TextMeshProUGUI blueScore;
     [SerializeField]
     private TextMeshProUGUI redScore;
@@ -61,7 +58,6 @@ public class MainMenu : MonoBehaviour
         this.fadeManager.FadeFromBlack();
 
         this.StartCoroutine(this.RefreshScore());
-        this.StartCoroutine(this.RefreshMap());
     }
 
     private void Update()
@@ -85,36 +81,18 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("CharacterSelect");
     }
 
-    private IEnumerator RefreshMap()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(5.0f);
-
-            this.gameMap.gameMap.ClearAllTiles();
-            this.gameMap.LoadMap();
-        }
-    }
-
     private IEnumerator RefreshScore()
-    {        
+    {
+        yield return null;
+
         while (true)
         {
-            string fullURL = TwitchSecrets.ServerName + "/getScore.php";
+            int[] scores = MapManager.instance.GetLatestScores();
 
-            WWWForm form = new WWWForm();
+            this.blueScore.text = scores[2].ToString();
+            this.redScore.text = scores[1].ToString();
+            this.yellowScore.text = scores[0].ToString();
 
-            using (UnityWebRequest www = UnityWebRequest.Get(fullURL))
-            {
-                yield return www.SendWebRequest();
-
-                Scoreboard currentScore = JsonUtility.FromJson<Scoreboard>(www.downloadHandler.text);
-
-                this.blueScore.text = currentScore.team3Score.ToString();
-                this.redScore.text = currentScore.team2Score.ToString();
-                this.yellowScore.text = currentScore.team1Score.ToString();
-            }
-            
             yield return new WaitForSeconds(1.0f);
         }
     }

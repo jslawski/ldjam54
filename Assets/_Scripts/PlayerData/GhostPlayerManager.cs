@@ -18,7 +18,7 @@ public class GhostPlayerManager : MonoBehaviour
 
     private Dictionary<int, GhostPlayer> ghostPlayersDict;
     
-    private float secondsBetweenUpdates = 0.033f;
+    private float secondsBetweenUpdates = 0.04f;
 
     private void Awake()
     {
@@ -28,14 +28,34 @@ public class GhostPlayerManager : MonoBehaviour
         }
 
         this.ghostPlayersDict = new Dictionary<int, GhostPlayer>();
+    }
 
-        StopAllCoroutines();
+    private void Start()
+    {
+        if (PostJamManager.instance.postJam == true)
+        {
+            this.EnableGhostPlayers();
+        }
+    }
+
+    public void DisableGhostPlayers()
+    {
+        this.StopAllCoroutines();
+
+        for (int i = 0; i < this.transform.childCount; i++)
+        {
+            Destroy(this.transform.GetChild(i).gameObject);
+        }
+    }
+
+    public void EnableGhostPlayers()
+    {
         StartCoroutine(this.Heartbeat());
     }
 
     private IEnumerator Heartbeat()
     {
-        while (false)
+        while (true)
         {
             yield return new WaitForSeconds(this.secondsBetweenUpdates);
             this.SendUpdate();
@@ -73,6 +93,11 @@ public class GhostPlayerManager : MonoBehaviour
 
     private void UpdateGhostPlayers(string ghostPlayerJSON)
     {
+        if (ghostPlayerJSON == string.Empty)
+        {
+            return;
+        }
+
         if (ghostPlayerJSON == "{\"players\":[]}")
         {
             return;

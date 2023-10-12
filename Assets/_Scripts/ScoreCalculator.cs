@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+using CharacterCustomizer;
 
 public class ScoreCalculator : MonoBehaviour
 {
@@ -12,12 +14,16 @@ public class ScoreCalculator : MonoBehaviour
     private int kernalMain;
     private int kernalInit;
 
+    private int[] cachedScores;
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
         }
+
+        this.cachedScores = new int[3];
     }
 
     public int[] GetScores(RenderTexture mapTexture)
@@ -40,6 +46,57 @@ public class ScoreCalculator : MonoBehaviour
         this.scoreBuffer.Release();
         this.scoreBuffer = null;
 
+        this.cachedScores[0] = result[0];
+        this.cachedScores[1] = result[1];
+        this.cachedScores[2] = result[2];
+
         return result;
+    }
+
+    public void SendScoreUpdate(int[] scores)
+    {
+        StartCoroutine(this.SendScoreUpdateRequest(scores));
+    }
+
+    private IEnumerator SendScoreUpdateRequest(int[] scores)
+    {
+        string fullURL = TwitchSecrets.ServerName + "/updateLatestScores.php";
+        WWWForm form = new WWWForm();
+        form.AddField("team1Score", scores[0]);
+        form.AddField("team2Score", scores[1]);
+        form.AddField("team3Score", scores[2]);
+
+        //Send request
+        using (UnityWebRequest www = UnityWebRequest.Post(fullURL, form))
+        {
+            yield return www.SendWebRequest();
+        }
+    }
+
+    public void GetLatestScores()
+    {
+        StartCoroutine(this.GetLatestScoresRequest());
+    }
+
+    private IEnumerator GetLatestScoresRequest()
+    {
+        string fullURL = TwitchSecrets.ServerName + "/getLatestScores.php";
+        WWWForm form = new WWWForm();
+
+        //Send request
+        using (UnityWebRequest www = UnityWebRequest.Post(fullURL, form))
+        {
+            yield return www.SendWebRequest();
+
+            Scoreboard currentScores = JsonUtility.FromJson<Scoreboard>(www.downloadHandler.text);
+            this.cachedScores[0] = currentScores.team1Score;
+            this.cachedScores[1] = currentScores.team2Score;
+            this.cachedScores[2] = currentScores.team3Score;
+        }
+    }
+
+    public int[] GetCachedScores()
+    {
+        return this.cachedScores;
     }
 }

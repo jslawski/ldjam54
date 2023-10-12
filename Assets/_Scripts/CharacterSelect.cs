@@ -25,6 +25,7 @@ public class CharacterSelect : MonoBehaviour
         if (Application.isEditor)
         {
             PlayerPrefs.SetInt("playerID", 111111);
+            PlayerPrefs.SetInt("team", 3);
         }
 
         if (PlayerPrefs.GetInt("playerID", -1) != -1)

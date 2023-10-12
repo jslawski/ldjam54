@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3919526034649298862}
   m_Layer: 6
   m_Name: GhostPlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 3919526034649298848}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -50,6 +50,16 @@ MonoBehaviour:
   - {fileID: 6303538534870219927, guid: 6043c3856c9fcd841a8f693aa74600f7, type: 3}
   - {fileID: 1907037306347299916, guid: 61c78f56f7a7a1a40ba913c739313fca, type: 3}
   - {fileID: 3405492172328002247, guid: a194abe5e56cb3a47a171d76fc66ad37, type: 3}
+  playerTeam: 0
+  brushSize: 0
+  playerData:
+    playerID: -1
+    data:
+      posX: 0
+      posY: 0
+      rot: 0
+      speed: 0
+      team: -1
 --- !u!114 &8291261731002660522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,10 +73,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   paintCanvas: {fileID: 0}
+  secondaryCanvas: {fileID: 0}
   brushColor: {r: 1, g: 0, b: 0, a: 1}
   brushHardness: 0.5
   brushStrength: 1
-  brushSize: 3.5
+  brushSize: 0.09
+  deltaContributor: 1
 --- !u!54 &3919526034649298862
 Rigidbody:
   m_ObjectHideFlags: 0

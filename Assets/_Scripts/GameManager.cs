@@ -16,8 +16,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private FadePanelManager fadeManager;
 
-    public bool postJam = true;
-
     private void Awake()
     {
         if (instance == null)
@@ -60,6 +58,23 @@ public class GameManager : MonoBehaviour
         }
         */
     }
+
+    public void StopHeartbeat()
+    {
+        MapManager.instance.StopHeartbeat();
+        /*
+        if (this.postJam == false)
+        {
+            StartCoroutine(this.SaveHeartbeat());
+            StartCoroutine(this.LoadHeartbeat());
+        }
+        else
+        {
+            MapManager.instance.StartHeartbeat();
+        }
+        */
+    }
+
     /*
     public IEnumerator SaveHeartbeat()
     {

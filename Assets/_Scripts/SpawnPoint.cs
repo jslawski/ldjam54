@@ -9,13 +9,10 @@ public class SpawnPoint : MonoBehaviour
 {
     [SerializeField]
     GameObject playerPrefab;
-
-    [SerializeField]
-    private Paintable paintableArea;
-
+    
     public Team owner = Team.None;
 
-    public float captureThreshold = 0.75f;
+    private float captureThreshold = 0.66f;
     
     public int spawnID;
 
@@ -27,6 +24,8 @@ public class SpawnPoint : MonoBehaviour
     [SerializeField]
     private MeshRenderer targetRenderer;
 
+    private SpawnPointCollider[] capturePoints;
+
     private void Start()
     {        
         this.Setup();
@@ -36,12 +35,12 @@ public class SpawnPoint : MonoBehaviour
     {
         GameObject playerObject = Instantiate(this.playerPrefab, this.transform.position, new Quaternion());
         playerObject.GetComponent<PlayerCharacter>().Setup();
-
-        GameManager.instance.StartHeartbeat();
     }
 
     private void Setup()
     {
+        this.capturePoints = GetComponentsInChildren<SpawnPointCollider>();
+
         StartCoroutine(this.RequestOwner());
     }
 
@@ -55,6 +54,8 @@ public class SpawnPoint : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Post(fullURL, form))
         {
             yield return www.SendWebRequest();
+
+            //Debug.LogError(gameObject.name + "'s Owner: " + www.downloadHandler.text);
 
             this.owner = (Team)int.Parse((www.downloadHandler.text));
         }
@@ -101,14 +102,14 @@ public class SpawnPoint : MonoBehaviour
 
     private void UpdateVisuals()
     {
-        Debug.LogError("Owner Updated: " + this.owner);
+        //Debug.LogError("Owner Updated: " + this.owner);
 
         switch (this.owner)
         {
             case Team.Team1:
                 this.emblemRenderer.enabled = true;
                 this.emblemRenderer.material = Resources.Load<Material>("Materials/emblemYellow");
-                this.targetRenderer.material = Resources.Load<Material>("Materials/targetGlowYellow");
+                this.targetRenderer.material = Resources.Load<Material>("Materials/targetGlowYellow");                
                 break;
             case Team.Team2:
                 this.emblemRenderer.enabled = true;
@@ -128,51 +129,67 @@ public class SpawnPoint : MonoBehaviour
                 Debug.LogError("Unknown Team: " + this.owner);
                 break;
         }
+
+        this.CaptureAllPoints();
     }
 
     private void UpdateCapturedStatus()
     {
-        int[] playerScores = this.paintableArea.GetScores();
+        int[] teamPoints = new int[3];
 
-        int totalPixels = this.paintableArea.TEXTURE_SIZE * this.paintableArea.TEXTURE_SIZE;
-
-        float[] teamRatios = new float[3];
-        
-        teamRatios[0] = (float)playerScores[0] / (float)totalPixels;
-        teamRatios[1] = (float)playerScores[1] / (float)totalPixels;
-        teamRatios[2] = (float)playerScores[2] / (float)totalPixels;
-
-        //Debug.LogError(this.gameObject.name + " Total Pixels: " + playerScores[3]);
-        /*
-        if (this.gameObject.name == "targetSpawnPointPrefab")
+        for (int i = 0; i < this.capturePoints.Length; i++)
         {
-            TestPixelChecker.instance.GetScores(this.paintableArea.GetSupportTexture());
-            Debug.LogError(this.gameObject.name + "\n" +
-                "Team1: " + playerScores[0] + " " + teamRatios[0] + "\n" +
-                "Team2: " + playerScores[1] + " " + teamRatios[1] + "\n" +
-                "Team3: " + playerScores[2] + " " + teamRatios[2]);
-        }
-        */
-        int majorityTeamIndex = -1;
-        float biggestRatio = float.NegativeInfinity;
-
-        for (int i = 0; i < teamRatios.Length; i++)
-        {
-            if (teamRatios[i] > biggestRatio)
+            switch (this.capturePoints[i].owner)
             {
-                majorityTeamIndex = i;
-                biggestRatio = teamRatios[i];
+                case Team.Team1:
+                    teamPoints[0]++;
+                    break;
+                case Team.Team2:
+                    teamPoints[1]++;
+                    break;
+                case Team.Team3:
+                    teamPoints[2]++;
+                    break;
+                default:
+                    break;
             }
         }
 
-        if (biggestRatio >= this.captureThreshold)
+        float team1Ratio = (float)teamPoints[0] / (float)this.capturePoints.Length;
+        float team2Ratio = (float)teamPoints[1] / (float)this.capturePoints.Length;
+        float team3Ratio = (float)teamPoints[2] / (float)this.capturePoints.Length;
+        /*
+        if (this.gameObject.name == "targetSpawnPointPrefab (7)")
         {
-            PaintManager.instance.Paint(this.paintableArea, this.transform.position, 1.0f, 1.0f, 1.0f, MapManager.instance.teamColors[majorityTeamIndex]);
-            this.UpdateOwner((Team)(majorityTeamIndex + 1));
+            Debug.LogError(this.gameObject.name + "\n" +
+                "Team 1: " + team1Ratio + "\n" +
+                            "Team 2: " + team2Ratio + "\n" +
+                            "Team 3: " + team3Ratio);
+        }
+        */
+        if (team1Ratio >= this.captureThreshold)
+        {
+            this.UpdateOwner(Team.Team1);
+        }
+        else if (team2Ratio >= this.captureThreshold)
+        {
+            this.UpdateOwner(Team.Team2);
+        }
+        else if (team3Ratio >= this.captureThreshold)
+        {
+            this.UpdateOwner(Team.Team3);
         }
         else
         {
             this.UpdateOwner(Team.None);
+        }
+    }
+
+    private void CaptureAllPoints()
+    {
+        for (int i = 0; i < this.capturePoints.Length; i++)
+        {
+            this.capturePoints[i].owner = this.owner;
         }
     }
 }

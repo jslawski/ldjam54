@@ -8,12 +8,10 @@ public class PaintManager : MonoBehaviour
     public static PaintManager instance;
 
     public Shader paintShader;
-    public Material paintMaterial;
+    private Material paintMaterial;
 
     public Shader deltaPaintShader;
-    public Material deltaPaintMaterial;
-
-    public Renderer savedMap;
+    private Material deltaPaintMaterial;
 
     private CommandBuffer command;
 
@@ -55,7 +53,7 @@ public class PaintManager : MonoBehaviour
         this.command.Clear();
     }
 
-    public void Paint(Paintable paintableObj, Vector3 objPos, float radius = 1.0f, float hardness = 0.5f, float strength = 0.5f, Color? color = null)
+    public void Paint(Paintable paintableObj, Vector3 objPos, float radius = 1.0f, float hardness = 0.5f, float strength = 0.5f, Color? color = null, bool deltaContributor = true)
     {
         RenderTexture mask = paintableObj.GetMaskTexture();
         RenderTexture support = paintableObj.GetSupportTexture();
@@ -66,17 +64,22 @@ public class PaintManager : MonoBehaviour
         this.paintMaterial.SetFloat(this.hardnessID, hardness);
         this.paintMaterial.SetFloat(this.strengthID, strength);
         this.paintMaterial.SetFloat(this.radiusID, radius);
-        this.paintMaterial.SetTexture(this.textureID, support);
         this.paintMaterial.SetColor(this.colorID, color ?? Color.red);
-
+        
+        this.paintMaterial.SetTexture(this.textureID, support);
+        
+        
         this.command.SetRenderTarget(mask);
         this.command.DrawRenderer(rend, this.paintMaterial, 0);
-
+        
         this.command.SetRenderTarget(support);
         this.command.Blit(mask, support);
-        
-        this.command.SetRenderTarget(delta);
-        this.command.Blit(mask, delta);
+
+        if (deltaContributor == true)
+        {
+            this.command.SetRenderTarget(delta);
+            this.command.Blit(mask, delta);
+        }
 
         Graphics.ExecuteCommandBuffer(this.command);
         this.command.Clear();
@@ -97,6 +100,28 @@ public class PaintManager : MonoBehaviour
 
         this.command.SetRenderTarget(support);
         this.command.Blit(delta, support, this.deltaPaintMaterial);
+
+        Graphics.ExecuteCommandBuffer(this.command);
+        this.command.Clear();
+    }
+
+    public void Blit(Texture source, Paintable dest, bool shouldDraw = false)
+    {
+        RenderTexture mask = dest.GetMaskTexture();
+        RenderTexture support = dest.GetSupportTexture();
+        Renderer rend = dest.GetRenderer();
+
+        this.command.SetRenderTarget(support);
+        this.command.Blit(source, support);
+
+        this.paintMaterial.SetTexture(this.textureID, source);
+
+        if (shouldDraw == true)
+        {
+            this.command.SetRenderTarget(mask);
+            this.command.DrawRenderer(rend, this.paintMaterial, 0);
+        }
+
         Graphics.ExecuteCommandBuffer(this.command);
         this.command.Clear();
     }

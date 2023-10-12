@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4661385293385732066}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.01, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -112,6 +112,7 @@ GameObject:
   - component: {fileID: 4661385293810414484}
   - component: {fileID: 4661385293810414485}
   - component: {fileID: 5849287420276024212}
+  - component: {fileID: 5542803784107703452}
   m_Layer: 0
   m_Name: MapManager
   m_TagString: Untagged
@@ -151,10 +152,6 @@ MonoBehaviour:
   - {r: 1, g: 0.8156863, b: 0.33333334, a: 1}
   - {r: 0.8666667, g: 0.14901961, b: 0.31764707, a: 1}
   - {r: 0.0627451, g: 0.7764706, b: 0.9764706, a: 1}
-  team1Color: {r: 1, g: 0.8156863, b: 0.33333334, a: 1}
-  team2Color: {r: 0.8666667, g: 0.14901961, b: 0.31764707, a: 1}
-  team3Color: {r: 0.0627451, g: 0.7764706, b: 0.9764706, a: 1}
-  paintableMap: {fileID: 4661385293385732077}
 --- !u!114 &5849287420276024212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,7 +165,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   paintShader: {fileID: 4800000, guid: 89f25f6d40a3b714e96497b5d0d94d8a, type: 3}
-  paintMaterial: {fileID: 0}
   deltaPaintShader: {fileID: 4800000, guid: 35e8c706074163d48a695c22889bce40, type: 3}
-  deltaPaintMaterial: {fileID: 0}
-  savedMap: {fileID: 0}
+--- !u!114 &5542803784107703452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4661385293810414486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca2d61381b2ac774590c3abb3ee0af3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreShader: {fileID: 7200000, guid: 87130b6b663b1bb42aedb5af51a28436, type: 3}

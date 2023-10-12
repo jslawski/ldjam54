@@ -13,8 +13,9 @@ public class MapManager : MonoBehaviour
 
     public Color[] teamColors;
 
-    [SerializeField]
     private Paintable paintableMap;
+
+    private Coroutine heartbeatCoroutine;
 
     #region Unity Functions
     private void Awake()
@@ -23,18 +24,41 @@ public class MapManager : MonoBehaviour
         {
             instance = this;
         }
+
+        this.paintableMap = GetComponentInChildren<Paintable>();
     }
 
     private void Start()
     {
         this.LoadLatestMap();
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.L))
+        {
+            this.LoadLatestMap();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        this.StopAllCoroutines();
+    }
     #endregion
 
     #region Public Functions
     public void StartHeartbeat()
     {
-        StartCoroutine(this.Heartbeat());
+        this.heartbeatCoroutine = StartCoroutine(this.Heartbeat());
+    }
+
+    public void StopHeartbeat()
+    {
+        if (this.heartbeatCoroutine != null)
+        {
+            StopCoroutine(this.heartbeatCoroutine);
+        }
     }
 
     public void SaveLatestMap()
@@ -46,8 +70,22 @@ public class MapManager : MonoBehaviour
     {
         StartCoroutine(this.LoadMap());
     }
-    #endregion
 
+    public int[] GetLatestScores()
+    {        
+        if (Application.isEditor)
+        {
+            return ScoreCalculator.instance.GetScores(this.paintableMap.GetSupportTexture());
+        }
+        
+#if UNITY_WEBGL
+        ScoreCalculator.instance.GetLatestScores();
+        return ScoreCalculator.instance.GetCachedScores();
+#elif UNITY_WINDOWS
+        return ScoreCalculator.instance.GetScores(this.paintableMap.GetSupportTexture());
+#endif
+    }
+    #endregion
 
     #region Network Request Coroutines
     private IEnumerator Heartbeat()
@@ -70,13 +108,13 @@ public class MapManager : MonoBehaviour
         {
             yield return www.SendWebRequest();
 
-            this.WriteLoadedMapToTexture(www.downloadHandler.data);
-            this.AppendNewDataToLoadedMap(www.downloadHandler.data);
+            this.WriteLoadedMapToTexture(www.downloadHandler.data, false);            
         }
 
+        this.AppendNewDataToLoadedMap();
         StartCoroutine(this.UploadMap());
     }
-
+    
     private IEnumerator UploadMap()
     {
         RenderTexture mapRendTex = this.paintableMap.GetSupportTexture();
@@ -109,62 +147,63 @@ public class MapManager : MonoBehaviour
         {
             yield return www.SendWebRequest();
 
-            this.WriteLoadedMapToTexture(www.downloadHandler.data);
+            this.WriteLoadedMapToTexture(www.downloadHandler.data, true);
         }
     }
-    #endregion
+#endregion
 
-    #region Helper Functions
-    private void WriteLoadedMapToTexture(byte[] data)
-    {
+#region Helper Functions
+    private void WriteLoadedMapToTexture(byte[] data, bool shouldDraw = false)
+    {        
         //Initialize texture to load 
         //When initializing a texture meant to Blit into a RenderTexture, 
         //it must be done in linear color space (Or don't?  I dunno...)
         Texture2D loadedMapTexture = new Texture2D(this.paintableMap.TEXTURE_SIZE, this.paintableMap.TEXTURE_SIZE, TextureFormat.RGBA32, 11, false);
         loadedMapTexture.LoadImage(data);
-        loadedMapTexture.alphaIsTransparency = true;
+        //loadedMapTexture.alphaIsTransparency = true;
         loadedMapTexture.Apply();
 
-        RenderTexture supportTexture = this.paintableMap.GetSupportTexture();
+        //We maybe don't need to pass shouldDraw here
+        //Just use it in a conditional statement to determine whether or not we Blit
+        PaintManager.instance.Blit(loadedMapTexture, this.paintableMap, shouldDraw);
 
-        Graphics.Blit(loadedMapTexture, supportTexture);
-
-        //File.WriteAllBytes(Application.dataPath + "/mapDataLoaded.png", loadedMapTexture.EncodeToPNG());
+        File.WriteAllBytes(Application.dataPath + "/mapDataLoaded.png", loadedMapTexture.EncodeToPNG());
 
         Destroy(loadedMapTexture);
     }
 
-    private void AppendNewDataToLoadedMap(byte[] data)
+    private void AppendNewDataToLoadedMap()
     {
+        //Make loadedMapTexutre a global variable, send it as a parameter in this function
+        //Set textureID to be loadedMapTexture, NOT support
+        //Blit onto the support texture
+
         PaintManager.instance.DeltaPaint(this.paintableMap);
     }
 
     private void FinishSave()
     {
+        this.paintableMap.ClearDelta();
+        
         RenderTexture rendTex = this.paintableMap.GetSupportTexture();
 
         //Update the texture displaying in game
+        
         Texture2D savedMapTexture = new Texture2D(this.paintableMap.TEXTURE_SIZE, this.paintableMap.TEXTURE_SIZE, TextureFormat.RGBA32, 11, false);
         RenderTexture.active = rendTex;
         savedMapTexture.ReadPixels(new Rect(0, 0, rendTex.width, rendTex.height), 0, 0);
         savedMapTexture.Apply();
         RenderTexture.active = null;
 
-        Graphics.Blit(savedMapTexture, rendTex);
+        PaintManager.instance.Blit(savedMapTexture, this.paintableMap, true);
 
-        //File.WriteAllBytes(Application.dataPath + "/mapDataSaved.png", savedMapTexture.EncodeToPNG());
+        File.WriteAllBytes(Application.dataPath + "/mapDataSaved.png", savedMapTexture.EncodeToPNG());
 
-        this.paintableMap.ClearDelta();
+        ScoreCalculator.instance.SendScoreUpdate(ScoreCalculator.instance.GetScores(this.paintableMap.GetSupportTexture()));
+
         Destroy(savedMapTexture);
-
-        int[] teamScores = ScoreCalculator.instance.GetScores(this.paintableMap.GetSupportTexture());
-
-        Debug.LogError(this.gameObject.name + "\n" +
-                "Team1: " + teamScores[0] +  "\n" +
-                "Team2: " + teamScores[1] +  "\n" +
-                "Team3: " + teamScores[2]);
     }    
 
 
-    #endregion
+#endregion
 }

@@ -10,13 +10,13 @@ public enum Team { None, Team1, Team2, Team3 };
 public class PlayerCharacter : MonoBehaviour
 {
     [SerializeField]
-    private GameObject[] robotModels;
+    protected GameObject[] robotModels;
 
     public Team playerTeam = Team.None;
 
     public int brushSize;
 
-    private PaintBrush paintbrush;
+    protected PaintBrush paintbrush;
 
     private Rigidbody playerRigidbody;
 
@@ -38,6 +38,8 @@ public class PlayerCharacter : MonoBehaviour
         this.BeginCameraFollow();
 
         GhostPlayerManager.instance.currentPlayer = playerData;
+
+        GameManager.instance.StartHeartbeat();
     }
 
     private void SetupPlayerModel()
@@ -81,7 +83,7 @@ public class PlayerCharacter : MonoBehaviour
     {
         this.playerData.data.posX = this.transform.position.x;
         this.playerData.data.posY = this.transform.position.z;
-        this.playerData.data.rot = this.transform.rotation.y;
+        this.playerData.data.rot = this.transform.rotation.eulerAngles.y;
         this.playerData.data.speed = this.playerRigidbody.velocity.magnitude;
         this.playerData.data.team = (int)this.playerTeam;
     }
@@ -101,5 +103,10 @@ public class PlayerCharacter : MonoBehaviour
             GameMap.instance.UpdateMap(this);
         }
         */
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.instance.StopHeartbeat();
     }
 }

@@ -125,7 +125,7 @@ public class PortMap : GameMap
         RenderTexture.active = rendTex;
         this.portedMapTexture.ReadPixels(new Rect(0, 0, rendTex.width, rendTex.height), 0, 0);
         this.portedMapTexture.filterMode = FilterMode.Bilinear;
-        this.portedMapTexture.alphaIsTransparency = true;
+        //this.portedMapTexture.alphaIsTransparency = true;
         this.portedMapTexture.Apply();
         RenderTexture.active = null;
     }
