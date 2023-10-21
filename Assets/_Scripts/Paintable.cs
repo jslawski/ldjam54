@@ -9,12 +9,14 @@ public class Paintable : MonoBehaviour
     public RenderTexture maskRenderTexture;
     public RenderTexture supportRenderTexture;
     public RenderTexture deltaRenderTexture;
+    public RenderTexture tempRenderTexture;
 
     private Renderer renderer;
 
     public RenderTexture GetMaskTexture() => this.maskRenderTexture;
     public RenderTexture GetSupportTexture() => this.supportRenderTexture;
     public RenderTexture GetDeltaTexture() => this.deltaRenderTexture;
+    public RenderTexture GetTempTexture() => this.tempRenderTexture;
     public Renderer GetRenderer() => this.renderer;
 
     public int depth = 0;
@@ -35,6 +37,9 @@ public class Paintable : MonoBehaviour
         this.deltaRenderTexture = new RenderTexture(TEXTURE_SIZE, TEXTURE_SIZE, this.depth, RenderTextureFormat.ARGB32);
         this.deltaRenderTexture.filterMode = FilterMode.Bilinear;
 
+        this.tempRenderTexture = new RenderTexture(TEXTURE_SIZE, TEXTURE_SIZE, this.depth, RenderTextureFormat.ARGB32);
+        this.tempRenderTexture.filterMode = FilterMode.Bilinear;
+
         this.renderer = GetComponent<Renderer>();
         renderer.material.SetTexture("_MaskTexture", this.maskRenderTexture);
 
@@ -49,7 +54,8 @@ public class Paintable : MonoBehaviour
     public void ClearDelta()
     {
         //this.maskRenderTexture.Release();
-        this.deltaRenderTexture.Release();        
+        this.deltaRenderTexture.Release();
+        this.tempRenderTexture.Release();
     }
 
     private void OnDestroy()
@@ -57,9 +63,11 @@ public class Paintable : MonoBehaviour
         this.maskRenderTexture.Release();
         this.supportRenderTexture.Release();
         this.deltaRenderTexture.Release();
+        this.tempRenderTexture.Release();
 
         Destroy(this.maskRenderTexture);
         Destroy(this.supportRenderTexture);
         Destroy(this.deltaRenderTexture);
+        Destroy(this.tempRenderTexture);
     }
 }

@@ -62,8 +62,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   paintCanvas: {fileID: 0}
-  secretCanvas: {fileID: 0}
   brushColor: {r: 0, g: 0, b: 0, a: 0}
   brushHardness: 1
   brushStrength: 1
-  brushSize: 0.5
+  brushSize: 0.75
+  deltaContributor: 1

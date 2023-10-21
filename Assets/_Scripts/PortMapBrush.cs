@@ -45,10 +45,7 @@ public class PortMapBrush : MonoBehaviour
     private IEnumerator AutoDestroy()
     {
         yield return null;
-        yield return null;
-        yield return null;
-        yield return null;
-        yield return null;
+
         this.brushPool.DestroyBrush(this);
     }
 }

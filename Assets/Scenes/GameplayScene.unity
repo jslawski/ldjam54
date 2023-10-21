@@ -1875,6 +1875,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PostJamCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 5057816720835197179, guid: 2065cf6ce554fe548aefc2cd8aeb5053,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5057816720835197183, guid: 2065cf6ce554fe548aefc2cd8aeb5053,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1979,6 +1984,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5057816722510309800, guid: 2065cf6ce554fe548aefc2cd8aeb5053,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 55.606506
+      objectReference: {fileID: 0}
+    - target: {fileID: 5057816722510309800, guid: 2065cf6ce554fe548aefc2cd8aeb5053,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 7.686493
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2065cf6ce554fe548aefc2cd8aeb5053, type: 3}
@@ -2196,7 +2211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3745ea2a031b9a429ff20029bf78012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  postJam: 0
+  postJam: 1
 --- !u!1 &1094198889
 GameObject:
   m_ObjectHideFlags: 0

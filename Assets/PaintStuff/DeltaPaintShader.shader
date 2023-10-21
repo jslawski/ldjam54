@@ -15,8 +15,8 @@ Shader "Jared/DeltaPaintShader"
 			"LightMode" = "UniversalForward"
 		}
 		//LOD 100
-		//ZTest Always
-		//ZWrite Off
+		ZTest Always
+		ZWrite Off
 		//Cull Off
 
 		Pass

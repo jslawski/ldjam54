@@ -67,8 +67,7 @@ public class PaintManager : MonoBehaviour
         this.paintMaterial.SetColor(this.colorID, color ?? Color.red);
         
         this.paintMaterial.SetTexture(this.textureID, support);
-        
-        
+                
         this.command.SetRenderTarget(mask);
         this.command.DrawRenderer(rend, this.paintMaterial, 0);
         
@@ -85,7 +84,43 @@ public class PaintManager : MonoBehaviour
         this.command.Clear();
     }
 
-    public void DeltaPaint(Paintable paintableObj)
+    public void OverwriteCanvas(Paintable paintableObj, Texture newCanvas)
+    {
+        RenderTexture mask = paintableObj.GetMaskTexture();
+        RenderTexture support = paintableObj.GetSupportTexture();
+        RenderTexture delta = paintableObj.GetDeltaTexture();
+        RenderTexture temp = paintableObj.GetTempTexture();
+        Renderer rend = paintableObj.GetRenderer();
+
+        //Step 0:  Blit Texture2D onto temporary RenderTexture
+        this.command.SetRenderTarget(temp);
+        this.command.Blit(newCanvas, temp);
+        Graphics.ExecuteCommandBuffer(this.command);
+        this.command.Clear();
+        
+        //Step 1:  Blit Delta onto loaded map to make composite map
+        this.deltaPaintMaterial.SetTexture(this.deltaTexureID, mask);
+        this.deltaPaintMaterial.SetTexture(this.textureID, temp);
+        this.command.SetRenderTarget(delta);
+        this.command.Blit(delta, temp, this.deltaPaintMaterial);
+        Graphics.ExecuteCommandBuffer(this.command);
+        this.command.Clear();
+
+        //Step 2:  Blit composite map onto support texture        
+        //this.command.SetRenderTarget(support);
+        this.command.Blit(temp, support);
+        Graphics.ExecuteCommandBuffer(this.command);
+        this.command.Clear();
+        
+        //Step 3:  DrawRenderer with paintMaterial
+        this.paintMaterial.SetTexture(this.textureID, temp);
+        this.command.SetRenderTarget(mask);
+        this.command.DrawRenderer(rend, this.paintMaterial, 0);
+        Graphics.ExecuteCommandBuffer(this.command);
+        this.command.Clear();
+    }
+
+    public void DeltaPaint(Paintable paintableObj, Texture latestCanvas)
     {
         RenderTexture mask = paintableObj.GetMaskTexture();
         RenderTexture support = paintableObj.GetSupportTexture();
@@ -93,7 +128,7 @@ public class PaintManager : MonoBehaviour
         Renderer rend = paintableObj.GetRenderer();             
 
         this.deltaPaintMaterial.SetTexture(this.deltaTexureID, mask);
-        this.deltaPaintMaterial.SetTexture(this.textureID, support);
+        this.deltaPaintMaterial.SetTexture(this.textureID, latestCanvas);
 
         this.command.SetRenderTarget(delta);
         this.command.DrawRenderer(rend, this.deltaPaintMaterial, 0);
@@ -126,3 +161,5 @@ public class PaintManager : MonoBehaviour
         this.command.Clear();
     }
 }
+
+//Blit delta to loaded texture, then blit THAT composite to support texture, then draw renderer

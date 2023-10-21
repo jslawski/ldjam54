@@ -8,8 +8,7 @@ public class SinglePlayerDataValues
 {
     public float posX;
     public float posY;
-    public float rot;
-    public float speed;
+    public float rot;    
     public int team;
 
     public SinglePlayerDataValues()
@@ -17,7 +16,6 @@ public class SinglePlayerDataValues
         this.posX = 0.0f;
         this.posY = 0.0f;
         this.rot = 0.0f;
-        this.speed = 0.0f;
         this.team = -1;
     }
 
@@ -26,7 +24,6 @@ public class SinglePlayerDataValues
         this.posX = dataToCopy.posX;
         this.posY = dataToCopy.posY;
         this.rot = dataToCopy.rot;
-        this.speed = dataToCopy.speed;
         this.team = dataToCopy.team;
     }
 }
@@ -35,6 +32,7 @@ public class SinglePlayerDataValues
 public class SinglePlayerData
 {
     public int playerID;
+    public string playerName;
     public SinglePlayerDataValues data;
 
     public SinglePlayerData()
@@ -46,6 +44,7 @@ public class SinglePlayerData
     public SinglePlayerData(SinglePlayerData dataToCopy)
     {
         this.playerID = dataToCopy.playerID;
+        this.playerName = dataToCopy.playerName;
         this.data = new SinglePlayerDataValues(dataToCopy.data);
     }
 }

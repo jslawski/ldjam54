@@ -12,6 +12,8 @@ public class GhostPlayer : PlayerCharacter
 
         this.playerTransform = GetComponent<Transform>();
 
+        this.SetupNametag();
+
         this.SetupPlayerModel();
     }
 
@@ -20,7 +22,7 @@ public class GhostPlayer : PlayerCharacter
         GameObject robotModel;
 
         this.paintbrush = GetComponent<PaintBrush>();
-        this.paintbrush.deltaContributor = false;
+        this.paintbrush.deltaContributor = true;
         this.paintbrush.paintCanvas = GameObject.Find("DrawPlane").GetComponent<Paintable>();
 
         switch ((Team)this.playerData.data.team)
@@ -43,7 +45,7 @@ public class GhostPlayer : PlayerCharacter
                 break;
         }
 
-        Instantiate(robotModel, this.transform);
+        Instantiate(robotModel, this.avatarParent);
     }
 
     public void UpdatePlayerData(SinglePlayerData playerData)
@@ -55,7 +57,7 @@ public class GhostPlayer : PlayerCharacter
     private void Update()
     {
         Vector3 targetPosition = new Vector3(this.playerData.data.posX, 0.0f, this.playerData.data.posY);
-        this.playerTransform.position = targetPosition;// Vector3.Lerp(this.playerTransform.position, targetPosition, 0.04f);
+        this.playerTransform.position = targetPosition;
         this.playerTransform.rotation = Quaternion.Euler(0.0f, this.playerData.data.rot, 0.0f);
     }
 }

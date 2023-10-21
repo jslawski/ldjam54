@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Tilemaps;
 using CharacterCustomizer;
+using TMPro;
 
 public enum Team { None, Team1, Team2, Team3 };
 
@@ -22,6 +23,12 @@ public class PlayerCharacter : MonoBehaviour
 
     public SinglePlayerData playerData;
 
+    [SerializeField]
+    protected Transform avatarParent;
+
+    [SerializeField]
+    protected TextMeshProUGUI nametag;
+
     // Start is called before the first frame update
     public void Setup()
     {
@@ -30,16 +37,22 @@ public class PlayerCharacter : MonoBehaviour
         this.playerData = new SinglePlayerData();
         this.playerData.playerID = PlayerPrefs.GetInt("playerID", -1);
         this.playerData.data.team = PlayerPrefs.GetInt("team", -1);
-
+        this.playerData.playerName = PlayerPrefs.GetString("playerName");
+        
         this.playerTeam = GameManager.instance.team;
         
         this.SetupPlayerModel();
 
+        this.SetupNametag();
+
         this.BeginCameraFollow();
 
         GhostPlayerManager.instance.currentPlayer = playerData;
+    }
 
-        GameManager.instance.StartHeartbeat();
+    protected void SetupNametag()
+    {
+        this.nametag.text = this.playerData.playerName;
     }
 
     private void SetupPlayerModel()
@@ -69,7 +82,7 @@ public class PlayerCharacter : MonoBehaviour
                 break;                
         }
 
-        Instantiate(robotModel, this.transform);
+        Instantiate(robotModel, this.avatarParent);
     }
 
     public void BeginCameraFollow()
@@ -83,8 +96,7 @@ public class PlayerCharacter : MonoBehaviour
     {
         this.playerData.data.posX = this.transform.position.x;
         this.playerData.data.posY = this.transform.position.z;
-        this.playerData.data.rot = this.transform.rotation.eulerAngles.y;
-        this.playerData.data.speed = this.playerRigidbody.velocity.magnitude;
+        this.playerData.data.rot = this.transform.rotation.eulerAngles.y;        
         this.playerData.data.team = (int)this.playerTeam;
     }
 
@@ -103,10 +115,5 @@ public class PlayerCharacter : MonoBehaviour
             GameMap.instance.UpdateMap(this);
         }
         */
-    }
-
-    private void OnDestroy()
-    {
-        GameManager.instance.StopHeartbeat();
     }
 }

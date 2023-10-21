@@ -14,7 +14,7 @@ public class PostJamManager : MonoBehaviour
         {
             instance = this;
         }
-
+        /*
         int cachedValue = PlayerPrefs.GetInt("postJam", -1);
 
         if (cachedValue > 0)
@@ -24,7 +24,7 @@ public class PostJamManager : MonoBehaviour
         else
         {
             this.postJam = false;
-        }
+        }*/
     }
     
     // Update is called once per frame

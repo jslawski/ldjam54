@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using CharacterCustomizer;
 using UnityEngine.SceneManagement;
+using System.Linq;
+using System;
+using TMPro;
 
 public class CharacterSelect : MonoBehaviour
 {
@@ -19,13 +22,18 @@ public class CharacterSelect : MonoBehaviour
     [SerializeField]
     private FadePanelManager fadeManager;
 
+    [SerializeField]
+    private TMP_InputField inputField;
+    [SerializeField]
+    private GameObject errorMessage;
+
     // Start is called before the first frame update
     void Start()
     {
         if (Application.isEditor)
         {
-            PlayerPrefs.SetInt("playerID", 111111);
-            PlayerPrefs.SetInt("team", 3);
+            PlayerPrefs.SetInt("playerID", -1);
+            PlayerPrefs.SetInt("team", -1);
         }
 
         if (PlayerPrefs.GetInt("playerID", -1) != -1)
@@ -37,6 +45,36 @@ public class CharacterSelect : MonoBehaviour
         {
             this.fadeManager.FadeFromBlack();
         }
+    }
+
+    public void ConfirmButtonPressed()
+    {
+        if (this.inputField.text.Length <= 0)
+        {
+            return;
+        }
+
+        if (this.inputField.text.All(Char.IsLetterOrDigit) == false)
+        {
+            this.errorMessage.SetActive(true);
+        }
+        else
+        {
+            this.errorMessage.SetActive(false);
+
+            PlayerPrefs.SetString("playerName", this.inputField.text);
+
+            this.fadeManager.OnFadeSequenceComplete += this.DisplayCharacterSelect;
+            this.fadeManager.FadeToBlack();
+        }
+    }
+
+    private void DisplayCharacterSelect()
+    {
+        this.fadeManager.OnFadeSequenceComplete -= this.DisplayCharacterSelect;
+        this.characterButtonsParent.SetActive(true);
+        this.inputField.gameObject.SetActive(false);
+        this.fadeManager.FadeFromBlack();
     }
 
     public void SelectButton(int index)
@@ -62,11 +100,12 @@ public class CharacterSelect : MonoBehaviour
 
         if (playerID == -1)
         {
-            playerID = Random.Range(123456, 987654);
+            playerID = UnityEngine.Random.Range(123456, 987654);
             PlayerPrefs.SetInt("playerID", playerID);
         }
 
         WWWForm form = new WWWForm();
+        form.AddField("playerName", PlayerPrefs.GetString("playerName"));
         form.AddField("playerID", playerID);
         form.AddField("team", (int)this.buttons[this.selectedIndex].team);
 

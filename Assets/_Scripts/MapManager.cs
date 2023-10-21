@@ -15,9 +15,17 @@ public class MapManager : MonoBehaviour
 
     private Paintable paintableMap;
 
-    private Coroutine heartbeatCoroutine;
+    private Coroutine heartbeatCoroutine;    
 
-    #region Unity Functions
+    public bool isServer = false;
+    
+    private UnityWebRequestAsyncOperation uploadWebRequest;
+    private UnityWebRequestAsyncOperation loadWebRequest;
+
+    Action<AsyncOperation> uploadHandler;
+    Action<AsyncOperation> loadHandler;
+
+#region Unity Functions
     private void Awake()
     {
         if (instance == null)
@@ -30,25 +38,20 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
+        #if UNITY_WEBGL
+        this.StartHeartbeat();
+        #endif
         this.LoadLatestMap();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.L))
-        {
-            this.LoadLatestMap();
-        }
     }
 
     private void OnDestroy()
     {
         this.StopAllCoroutines();
     }
-    #endregion
+#endregion
 
-    #region Public Functions
-    public void StartHeartbeat()
+#region Public Functions
+    private void StartHeartbeat()
     {
         this.heartbeatCoroutine = StartCoroutine(this.Heartbeat());
     }
@@ -63,12 +66,44 @@ public class MapManager : MonoBehaviour
 
     public void SaveLatestMap()
     {
-        StartCoroutine(this.PreSaveLoadMap());
+        //We probably don't need to pre-load if just one instance is doing all of the saving!
+        RenderTexture support = this.paintableMap.GetSupportTexture();
+
+        Texture2D loadedMapTexture = new Texture2D(this.paintableMap.TEXTURE_SIZE, this.paintableMap.TEXTURE_SIZE, TextureFormat.RGBA32, 11, false);
+        RenderTexture.active = support;
+        loadedMapTexture.ReadPixels(new Rect(0, 0, support.width, support.height), 0, 0);
+        loadedMapTexture.Apply();
+        RenderTexture.active = null;
+
+        string fullURL = TwitchSecrets.ServerName + "/uploadMapNew.php";
+        WWWForm form = new WWWForm();
+        form.AddBinaryData("mapData", loadedMapTexture.EncodeToPNG(), "mapDataNew.png");
+
+        UnityWebRequest www = UnityWebRequest.Post(fullURL, form);
+
+        this.uploadWebRequest = www.SendWebRequest();
+        this.uploadHandler = (data) => { this.UploadCompleted(www); };
+        this.uploadWebRequest.completed -= this.uploadHandler;
+        this.uploadWebRequest.completed += this.uploadHandler;
+
+
+        //StartCoroutine(this.PreSaveLoadMap());
+        Texture2D.Destroy(loadedMapTexture);
     }
 
     public void LoadLatestMap()
     {
-        StartCoroutine(this.LoadMap());
+        string fullURL = TwitchSecrets.ServerName + "/getMap.php";
+        WWWForm form = new WWWForm();
+
+        UnityWebRequest www = UnityWebRequest.Post(fullURL, form);
+
+        this.loadWebRequest = www.SendWebRequest();
+        this.loadHandler = (data) => { this.LoadCompleted(www); };
+        this.loadWebRequest.completed -= this.loadHandler;
+        this.loadWebRequest.completed += this.loadHandler;
+
+        //StartCoroutine(this.LoadMap());
     }
 
     public int[] GetLatestScores()
@@ -77,30 +112,81 @@ public class MapManager : MonoBehaviour
         {
             return ScoreCalculator.instance.GetScores(this.paintableMap.GetSupportTexture());
         }
-        
-#if UNITY_WEBGL
+
+        #if UNITY_WEBGL
         ScoreCalculator.instance.GetLatestScores();
         return ScoreCalculator.instance.GetCachedScores();
-#elif UNITY_WINDOWS
+        #elif UNITY_STANDALONE_WIN
         return ScoreCalculator.instance.GetScores(this.paintableMap.GetSupportTexture());
-#endif
+        #endif
     }
     #endregion
 
-    #region Network Request Coroutines
+    #region NetworkRequestHandlers
+    private void PreSaveLoadCompleted(UnityWebRequest www)
+    {
+        if (www.result == UnityWebRequest.Result.ConnectionError ||
+            www.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.LogError("Pre-Save Load Error: " + www.error);
+        }
+        else
+        {
+            this.WriteLoadedMapToTexture(www.downloadHandler.data);
+        }
+    }
+
+    private void UploadCompleted(UnityWebRequest www)
+    {
+        if (www.result == UnityWebRequest.Result.ConnectionError ||
+            www.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.LogError("Upload Error: " + www.error);
+        }
+        else
+        {
+            this.FinishSave();
+        }
+
+        www.Dispose();
+    }
+
+    private void LoadCompleted(UnityWebRequest www)
+    {
+        //Debug.LogError("I'm Here.  Result: " + www.downloadHandler.data.ToString());
+
+        if (www.result == UnityWebRequest.Result.ConnectionError ||
+            www.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.LogError("Load Error: " + www.error);
+        }
+        else
+        {
+            this.WriteLoadedMapToTexture(www.downloadHandler.data);
+        }
+
+        www.Dispose();
+    }
+
+    #endregion
+
     private IEnumerator Heartbeat()
     {
         while (true)
         {
-            yield return new WaitForSeconds(5.0f);
-            this.SaveLatestMap();
+            yield return new WaitForSeconds(10.0f);
+            this.LoadLatestMap();
         }
     }
+
+    /*
+    #region Network Request Coroutines
+    
     
     //Load the latest map from the server
     private IEnumerator PreSaveLoadMap()
     {
-        string fullURL = TwitchSecrets.ServerName + "/mapData.png";
+        string fullURL = TwitchSecrets.ServerName + "/getMap.php";
         WWWForm form = new WWWForm();
 
         //Send request
@@ -108,102 +194,135 @@ public class MapManager : MonoBehaviour
         {
             yield return www.SendWebRequest();
 
-            this.WriteLoadedMapToTexture(www.downloadHandler.data, false);            
+            if (www.result == UnityWebRequest.Result.ConnectionError||
+                www.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("ERROR: " + www.error);
+            }
+
+            ///Debug.LogError("Data Size: " + www.downloadedBytes);
+            ///Debug.LogError("Data: " + www.downloadHandler.data.ToString());
+            ///Debug.LogError("Data Text: " + www.downloadHandler.text);
+
+            this.WriteLoadedMapToTexture(www.downloadHandler.data, true);
         }
 
-        this.AppendNewDataToLoadedMap();
+        //this.AppendNewDataToLoadedMap();
         StartCoroutine(this.UploadMap());
     }
     
     private IEnumerator UploadMap()
     {
-        RenderTexture mapRendTex = this.paintableMap.GetSupportTexture();
+        RenderTexture support = this.paintableMap.GetSupportTexture();
 
-        Texture2D savedMapTexture = new Texture2D(mapRendTex.width, mapRendTex.height, TextureFormat.RGBA32, false, false);
-        RenderTexture.active = mapRendTex;
-        savedMapTexture.ReadPixels(new Rect(0, 0, mapRendTex.width, mapRendTex.height), 0, 0);
-        savedMapTexture.Apply();
+        Texture2D loadedMapTexture = new Texture2D(this.paintableMap.TEXTURE_SIZE, this.paintableMap.TEXTURE_SIZE, TextureFormat.RGBA32, 11, false);
+        RenderTexture.active = support;
+        loadedMapTexture.ReadPixels(new Rect(0, 0, support.width, support.height), 0, 0);
+        loadedMapTexture.Apply();
         RenderTexture.active = null;
-
-        string fullURL = TwitchSecrets.ServerName + "/uploadMap.php";
+        
+        if (Application.isEditor == true)
+        {
+            File.WriteAllBytes(Application.dataPath + "/05_mapToUpload.png", this.loadedMapTexture.EncodeToPNG());
+        }
+        
+        string fullURL = TwitchSecrets.ServerName + "/uploadMapNew.php";
         WWWForm form = new WWWForm();
-        form.AddBinaryData("mapData", savedMapTexture.EncodeToPNG(), "mapData.png");
+        form.AddBinaryData("mapData", loadedMapTexture.EncodeToPNG(), "mapDataNew.png");
         using (UnityWebRequest www = UnityWebRequest.Post(fullURL, form))
         {
             yield return www.SendWebRequest();
         }
 
-        Destroy(savedMapTexture);
-
         this.FinishSave();
+
+        Texture2D.Destroy(loadedMapTexture);
     }
 
     private IEnumerator LoadMap()
     {
-        string fullURL = TwitchSecrets.ServerName + "/mapData.png";
+        string fullURL = TwitchSecrets.ServerName + "/getMap.php";
         WWWForm form = new WWWForm();
 
         using (UnityWebRequest www = UnityWebRequest.Post(fullURL, form))
         {
-            yield return www.SendWebRequest();
+            UnityWebRequestAsyncOperation asyncOp = new UnityWebRequestAsyncOperation();
+            asyncOp.webRequest = www;
 
+                //yield return www.SendWebRequest();            
             this.WriteLoadedMapToTexture(www.downloadHandler.data, true);
         }
+        
     }
 #endregion
-
-#region Helper Functions
-    private void WriteLoadedMapToTexture(byte[] data, bool shouldDraw = false)
-    {        
+*/
+    #region Helper Functions    
+    private void WriteLoadedMapToTexture(byte[] data)
+    {
         //Initialize texture to load 
         //When initializing a texture meant to Blit into a RenderTexture, 
         //it must be done in linear color space (Or don't?  I dunno...)
+
         Texture2D loadedMapTexture = new Texture2D(this.paintableMap.TEXTURE_SIZE, this.paintableMap.TEXTURE_SIZE, TextureFormat.RGBA32, 11, false);
         loadedMapTexture.LoadImage(data);
-        //loadedMapTexture.alphaIsTransparency = true;
         loadedMapTexture.Apply();
 
-        //We maybe don't need to pass shouldDraw here
-        //Just use it in a conditional statement to determine whether or not we Blit
-        PaintManager.instance.Blit(loadedMapTexture, this.paintableMap, shouldDraw);
-
-        File.WriteAllBytes(Application.dataPath + "/mapDataLoaded.png", loadedMapTexture.EncodeToPNG());
-
-        Destroy(loadedMapTexture);
-    }
-
-    private void AppendNewDataToLoadedMap()
-    {
-        //Make loadedMapTexutre a global variable, send it as a parameter in this function
-        //Set textureID to be loadedMapTexture, NOT support
-        //Blit onto the support texture
-
-        PaintManager.instance.DeltaPaint(this.paintableMap);
+        PaintManager.instance.OverwriteCanvas(this.paintableMap, loadedMapTexture);
+        
+        Texture2D.Destroy(loadedMapTexture);
     }
 
     private void FinishSave()
     {
         this.paintableMap.ClearDelta();
         
-        RenderTexture rendTex = this.paintableMap.GetSupportTexture();
-
-        //Update the texture displaying in game
-        
-        Texture2D savedMapTexture = new Texture2D(this.paintableMap.TEXTURE_SIZE, this.paintableMap.TEXTURE_SIZE, TextureFormat.RGBA32, 11, false);
-        RenderTexture.active = rendTex;
-        savedMapTexture.ReadPixels(new Rect(0, 0, rendTex.width, rendTex.height), 0, 0);
-        savedMapTexture.Apply();
-        RenderTexture.active = null;
-
-        PaintManager.instance.Blit(savedMapTexture, this.paintableMap, true);
-
-        File.WriteAllBytes(Application.dataPath + "/mapDataSaved.png", savedMapTexture.EncodeToPNG());
-
+        if (Application.isEditor == true)
+        {
+            ScoreCalculator.instance.SendScoreUpdate(ScoreCalculator.instance.GetScores(this.paintableMap.GetSupportTexture()));
+        }
+#if UNITY_STANDALONE_WIN
         ScoreCalculator.instance.SendScoreUpdate(ScoreCalculator.instance.GetScores(this.paintableMap.GetSupportTexture()));
+#endif
 
-        Destroy(savedMapTexture);
-    }    
+    }
+    /*
+    private void SaveMapStages()
+    {
+        RenderTexture mask = this.paintableMap.GetMaskTexture();
+        RenderTexture support = this.paintableMap.GetSupportTexture();
+        RenderTexture delta = this.paintableMap.GetDeltaTexture();
+        RenderTexture temp = this.paintableMap.GetTempTexture();
 
+        File.WriteAllBytes(Application.dataPath + "/00_mapDataLoaded.png", this.loadedMapTexture.EncodeToPNG());
 
+        this.loadedMapTexture = new Texture2D(this.paintableMap.TEXTURE_SIZE, this.paintableMap.TEXTURE_SIZE, TextureFormat.RGBA32, 11, false);
+        RenderTexture.active = mask;
+        this.loadedMapTexture.ReadPixels(new Rect(0, 0, mask.width, mask.height), 0, 0);
+        this.loadedMapTexture.Apply();
+        RenderTexture.active = null;
+        File.WriteAllBytes(Application.dataPath + "/01_mask.png", this.loadedMapTexture.EncodeToPNG());
+
+        this.loadedMapTexture = new Texture2D(this.paintableMap.TEXTURE_SIZE, this.paintableMap.TEXTURE_SIZE, TextureFormat.RGBA32, 11, false);
+        RenderTexture.active = delta;
+        this.loadedMapTexture.ReadPixels(new Rect(0, 0, delta.width, delta.height), 0, 0);
+        this.loadedMapTexture.Apply();
+        RenderTexture.active = null;
+        File.WriteAllBytes(Application.dataPath + "/02_delta.png", this.loadedMapTexture.EncodeToPNG());
+
+        this.loadedMapTexture = new Texture2D(this.paintableMap.TEXTURE_SIZE, this.paintableMap.TEXTURE_SIZE, TextureFormat.RGBA32, 11, false);
+        RenderTexture.active = temp;
+        this.loadedMapTexture.ReadPixels(new Rect(0, 0, temp.width, temp.height), 0, 0);
+        this.loadedMapTexture.Apply();
+        RenderTexture.active = null;
+        File.WriteAllBytes(Application.dataPath + "/03_temp.png", this.loadedMapTexture.EncodeToPNG());
+
+        this.loadedMapTexture = new Texture2D(this.paintableMap.TEXTURE_SIZE, this.paintableMap.TEXTURE_SIZE, TextureFormat.RGBA32, 11, false);
+        RenderTexture.active = support;
+        this.loadedMapTexture.ReadPixels(new Rect(0, 0, support.width, support.height), 0, 0);
+        this.loadedMapTexture.Apply();
+        RenderTexture.active = null;
+        File.WriteAllBytes(Application.dataPath + "/04_support.png", this.loadedMapTexture.EncodeToPNG());
+    }
+*/
 #endregion
 }

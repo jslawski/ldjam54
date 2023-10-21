@@ -21,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
 
     public LayerMask collisionLayer;
 
+    public Transform avatarParent;
+
     private void Start()
     {
         this.rigidBody = GetComponent<Rigidbody>();
@@ -32,7 +34,16 @@ public class PlayerMovement : MonoBehaviour
         this.playerVelocity.x = Mathf.MoveTowards(playerVelocity.x, desiredVelocity.x, maxSpeedChange);
         this.playerVelocity.z = Mathf.MoveTowards(playerVelocity.z, desiredVelocity.z, maxSpeedChange);
 
-        this.transform.forward = new Vector3(this.playerVelocity.x, this.transform.forward.y, this.playerVelocity.z).normalized;
+        if (this.playerVelocity.magnitude > 0.0f)
+        {
+            Vector3 facingTarget = new Vector3(this.transform.position.x + this.playerVelocity.x,
+                                                this.transform.position.y,
+                                                this.transform.position.z + this.playerVelocity.z);
+
+            this.avatarParent.LookAt(facingTarget, Vector3.up);
+        }
+        
+        //this.transform.forward = new Vector3(this.playerVelocity.x, this.transform.forward.y, this.playerVelocity.z).normalized;
     }
 
     private void Update()

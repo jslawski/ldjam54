@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using CharacterCustomizer;
+using System;
 
 public class GhostPlayerManager : MonoBehaviour
 {
@@ -16,9 +17,16 @@ public class GhostPlayerManager : MonoBehaviour
     [SerializeField]
     private GameObject ghostPlayerPrefab;
 
+    [SerializeField]
+    private GameObject ghostPlayersParent;
+
     private Dictionary<int, GhostPlayer> ghostPlayersDict;
     
     private float secondsBetweenUpdates = 0.04f;
+
+    private UnityWebRequestAsyncOperation updateWebRequest;
+
+    Action<AsyncOperation> updateHandler;
 
     private void Awake()
     {
@@ -28,6 +36,8 @@ public class GhostPlayerManager : MonoBehaviour
         }
 
         this.ghostPlayersDict = new Dictionary<int, GhostPlayer>();
+
+        StartCoroutine(this.Heartbeat());
     }
 
     private void Start()
@@ -36,21 +46,20 @@ public class GhostPlayerManager : MonoBehaviour
         {
             this.EnableGhostPlayers();
         }
+        else
+        {
+            this.DisableGhostPlayers();
+        }
     }
 
     public void DisableGhostPlayers()
     {
-        this.StopAllCoroutines();
-
-        for (int i = 0; i < this.transform.childCount; i++)
-        {
-            Destroy(this.transform.GetChild(i).gameObject);
-        }
+        this.ghostPlayersParent.SetActive(false);
     }
 
     public void EnableGhostPlayers()
     {
-        StartCoroutine(this.Heartbeat());
+        this.ghostPlayersParent.SetActive(true);
     }
 
     private IEnumerator Heartbeat()
@@ -64,9 +73,30 @@ public class GhostPlayerManager : MonoBehaviour
 
     private void SendUpdate()
     {
-        StartCoroutine(this.PlayerUpdateRequest());
-    }
+        string fullURL = TwitchSecrets.ServerName;
+        WWWForm form = new WWWForm();
 
+        if (this.currentPlayer != null)
+        {
+            fullURL += "/updatePlayers.php";
+            form.AddField("playerID", this.currentPlayer.playerID);
+            form.AddField("playerName", this.currentPlayer.playerName);
+            form.AddField("playerData", JsonUtility.ToJson(this.currentPlayer.data));
+        }
+        else
+        {
+            fullURL += "/getPlayers.php";
+        }
+
+        UnityWebRequest www = UnityWebRequest.Post(fullURL, form);
+        this.updateWebRequest = www.SendWebRequest();
+        this.updateHandler = (data) => { this.UpdateGhostPlayers(www); };
+        this.updateWebRequest.completed -= this.updateHandler;
+        this.updateWebRequest.completed += this.updateHandler;
+
+        //StartCoroutine(this.PlayerUpdateRequest());
+    }
+    /*
     private IEnumerator PlayerUpdateRequest()
     {
         string fullURL = TwitchSecrets.ServerName;
@@ -76,6 +106,7 @@ public class GhostPlayerManager : MonoBehaviour
         {
             fullURL += "/updatePlayers.php";
             form.AddField("playerID", this.currentPlayer.playerID);
+            form.AddField("playerName", this.currentPlayer.playerName);
             form.AddField("playerData", JsonUtility.ToJson(this.currentPlayer.data));
         }
         else
@@ -90,9 +121,11 @@ public class GhostPlayerManager : MonoBehaviour
             this.UpdateGhostPlayers(www.downloadHandler.text);
         }
     }
-
-    private void UpdateGhostPlayers(string ghostPlayerJSON)
+    */
+    private void UpdateGhostPlayers(UnityWebRequest www)
     {
+        string ghostPlayerJSON = www.downloadHandler.text;
+
         if (ghostPlayerJSON == string.Empty)
         {
             return;
@@ -107,6 +140,8 @@ public class GhostPlayerManager : MonoBehaviour
 
         this.UpdateActivePlayers();
         this.PruneInactivePlayers();
+
+        www.Dispose();
     }
 
     private void UpdateActivePlayers()
@@ -129,7 +164,7 @@ public class GhostPlayerManager : MonoBehaviour
     private void CreateNewGhostPlayer(SinglePlayerData playerData)
     {
         Vector3 instantiationPosition = new Vector3(playerData.data.posX, 0.0f, playerData.data.posY);
-        GameObject ghostPlayerInstance = Instantiate(this.ghostPlayerPrefab, instantiationPosition, new Quaternion(), this.transform);
+        GameObject ghostPlayerInstance = Instantiate(this.ghostPlayerPrefab, instantiationPosition, new Quaternion(), this.ghostPlayersParent.transform);
         GhostPlayer ghostPlayerComponent = ghostPlayerInstance.GetComponent<GhostPlayer>();
         ghostPlayerComponent.Setup(playerData);
         this.ghostPlayersDict[ghostPlayerComponent.playerData.playerID] = ghostPlayerComponent;

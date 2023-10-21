@@ -33,7 +33,7 @@ public class PaintBrush : MonoBehaviour
     {
         if (this.paintCanvas != null)
         {
-            PaintManager.instance.Paint(this.paintCanvas, this.transform.position, this.brushSize, this.brushHardness, this.brushStrength, this.brushColor, this.deltaContributor);
+            PaintManager.instance.Paint(this.paintCanvas, this.transform.position, this.brushSize, this.brushHardness, this.brushStrength, this.brushColor, true);
         }
     }
 }
